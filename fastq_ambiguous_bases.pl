@@ -1,25 +1,31 @@
 #!/usr/bin/env perl  
 # Khushbu Patel 3-16-18
-# This script provides number of ambiguous bases, ratio and percent ambiguous bases for each read in a fastq file.
+# This script provides number of ambiguous bases, ratio and percent ambiguous bases for each read in a fastq file. It generatess an out_report.txt file. It also prompts if user wants to store the fasta file. 
 
 
 use warnings;
 use strict;
 
 #get command-line arguments, or die with a usage statement
-my $usage         = "Usage: perl test1.pl infile \n";
+my $usage         = "Usage: perl test1.pl infile.fastq \n";
 my $infile        = shift or die $usage;  #takes input file
 
 
 #to create a fasta file from a fastq file
-#my $cmd = "cat PNUSAE012394-WAPHL-M4796-180226.fastq.gz.cleaned.fastq | paste - - - - | sed 's/^@/>/g'| cut -f1-2 | tr '\\t' '\n' > test.fasta";
-#system("$cmd");
+my $cmd = "cat $infile | paste - - - - | sed 's/^@/>/g'| cut -f1-2 | tr '\\t' '\n' > test.fasta";
+system("$cmd");
 
 #print "Fasta file created!\n";
 
-open(FH,$infile) or die "Cannot open file!:$!\n";
+open(FH,"test.fasta") or die "Cannot open file!:$!\n";
 
 my @result;
+
+#storing the file name without extension.
+my $basename;
+($basename = $infile) =~ s/\.[^.]+$//;
+
+
 
 
 while(<FH>)
@@ -77,9 +83,41 @@ while(<FH>)
 	
 	#printing the result array
 	
+	open(FH1, '>', 'out_report.txt');
+	
 	foreach (@result)
 	{
-		print "$_\n";
+		print FH1 "$_\n";
 		}
-
+	
+	close(FH1);
+	
+	print "Done!\n";
+	
+	
+	#Prompts if user wants to save the fasta file
+	print "Do you want to save the fasta file? (Y/N) \n";
+	my $a = <STDIN>;
+	
+	if ($a =~/^y|yes|n|no$/i)
+    {
+        if ($a =~/^no?$/i) 
+            { 
+                print "File deleted!\n";
+				system("rm test.fasta");  #deletes fasta file if user inputs n/N/NO/no
+            } 
+        if ($a =~/^y(es)?$/i)
+            {
+                print "file not deleted\n";
+				system("mv test.fasta $basename.fasta"); #renaming test.fasta 
+            }
+    } else {
+        #Validates user input and returns message if invalid option is provided
+		system("rm test.fasta");
+		print "\n\n=====================================\n";
+        print "You Have Entered and Incorrect Option\n";
+        print "Valid Options are [Y/N]\n";
+        print "=====================================\n\n";
+        
+    }
 	
