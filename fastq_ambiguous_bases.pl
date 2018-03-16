@@ -7,7 +7,7 @@ use warnings;
 use strict;
 
 #get command-line arguments, or die with a usage statement
-my $usage         = "Usage: perl test1.pl infile.fastq \n";
+my $usage         = "Usage: ./test1.pl infile.fastq \n";
 my $infile        = shift or die $usage;  #takes input file
 
 
