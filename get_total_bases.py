@@ -9,7 +9,7 @@ f=open(infile,"r")
 sum = 0
 
 for line in f:
-	line = line.rstrip()	#quivalent of chomp in perl; removes new line characters
+	line = line.rstrip()	#equivalent of chomp in perl; removes new line characters
 	if line.startswith('>'):
 		continue		#if starts with header, do nothing
 	else:
