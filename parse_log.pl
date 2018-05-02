@@ -12,7 +12,7 @@ use strict;
 
 	my @array;
 
-	my $str5 = `cat /scicomp/home/oix2/EDLB/projects/Surveillance/Shigella/Local_WA_flexneri_march2018/lyve-SET_v1.1.4f_ext-ref_95-3008_clusterA_3-12-18/log/launch_set.log | grep 'reportMaskedGenomes: '`;
+	my $str5 = `cat path/to/log/launch_set.log | grep 'reportMaskedGenomes: '`;
 	
 	
 
