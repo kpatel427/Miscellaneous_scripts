@@ -1,5 +1,5 @@
-#!/usr/local/bin/python
-# Khushbu Patel | 04/30/2018
+!/usr/local/bin/python
+# Khushbu Patel | 05/11/2018
 # parses VCF - caculates numbers of bases that Pass or do not pass due to consensus/coverage or other issues. Also, calculates number of bases with depth ge and lt 20
 # Usage: ./parseVCF.py 
 
