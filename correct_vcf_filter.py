@@ -1,10 +1,12 @@
 #!/usr/local/bin/python
 # Khushbu Patel | 05/15/2018
 # Corrects the filter and Calculates number of bases falsely assigned incorrect filter when the bases pass the consensus and coverage. Prints out a new vcf with filters corrected. 
-# Usage: ./correct_vcf_filter.py 
+# Usage: ./correct_vcf_filter.py inputfile.vcf
+# Output will be another vcf file, named correct_vcf.vcf; This script will not overwrite the original VCF
 
-infile=""
-infile=raw_input("Enter the file name:") # takes file as user input from the command line
+import sys
+
+infile= sys.argv[1]	# Takes the file name as a command line argument
 f=open(infile,"r")
 
 
@@ -28,7 +30,7 @@ with open('correct_vcf.vcf', 'a') as f1:
 				if(len(temp)> 6):
 					temp[6] = temp[6].replace('%','')
 					if(temp[3] >= 20 and float(temp[6]) < 5.0):		# if coverage and consensus both meet, change the filter to PASS
-						print(line, "--Incorrect Filter!")
+						#print(line, "--Incorrect Filter!")
 						array[6] = "PASS"
 						out = '\t'.join(array)
 						count += 1					# Count the number of sites that have been assigned wrong filter
