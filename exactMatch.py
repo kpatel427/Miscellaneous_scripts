@@ -1,6 +1,6 @@
 #!/usr/local/bin/python
 # Khushbu Patel | 05/25/2018
-# enter the pattern (p) and Alignment (t) to search from; returns the positions where there were exact matches
+# enter the pattern (p) and Alignment (t) to search from; returns the positions where exact matches occur
 # Usage: ./exactmatch.py 
 
 def exactMatch(p,t):
