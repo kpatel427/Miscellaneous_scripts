@@ -40,7 +40,7 @@ inserts = parseBam(input_bam)
 def stats(in_array):
 	a = np.array(in_array)
 	a = a.astype(int)	
-	global min,max		# Gives error: local variable 'min' referenced before assignment
+	global min,max		# To avoid error: local variable 'min' referenced before assignment
 	min = min(a)
 	max = max(a)
 	
