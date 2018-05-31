@@ -3,8 +3,7 @@
 #|__This script requires Python 3.4 and modules - numpy & scipy
 #|__extracts the quality string and determine the length and average quality score of each read
 #|__Converts the raw values for each read set into descriptive statistics
-#|__Converts bam file to sam file format, extracts insert sizes of correctly paired mapped reads
-#|__Provides descriptive stats for insert sizes 
+#|__Provides descriptive stats for Read Lengths and Read Qualities
 # Usage: ./extract_quality_and_stats_fastq.py [Read_1.fastq] [Read_2.fastq]
 
 import numpy as np
