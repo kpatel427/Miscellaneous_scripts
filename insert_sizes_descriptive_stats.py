@@ -8,7 +8,7 @@
 import numpy as np
 import sys
 import subprocess
-from scipy.stats import skew,mstats,uniform
+from scipy.stats import skew,mstats,uniform,kstest
 
 
 inserts = []
@@ -38,9 +38,10 @@ inserts = parseBam(input_bam)
 
 # To calculate descriptive stats
 def stats(in_array):
+	uniform_result = ''
 	a = np.array(in_array)
 	a = a.astype(int)	
-	global min,max		# To avoid error: local variable 'min' referenced before assignment
+	global min,max		# to avoid error: local variable 'min' referenced before assignment
 	min = min(a)
 	max = max(a)
 	
@@ -52,9 +53,9 @@ def stats(in_array):
 	Q3 = np.percentile(a,75)
 	skewness = skew(a)
 	geometric_mean = mstats.gmean(a)
-	uni_mean = uniform.mean(a)
-	
-	
+	m,v,s = uniform.stats(a,moments="mvs")	# mean, variance and skewness arrays
+	uni_mean = m.mean()
+
 	high = []
 	low = []
 	IQR = Q3 - Q1
@@ -71,26 +72,23 @@ def stats(in_array):
 	else:
 		high_whisker = max
 	
-	return mean,std_dev,variance,Q1,median,Q3,skewness,geometric_mean,low_whisker,high_whisker,uni_mean
+	return mean,std_dev,variance,Q1,median,Q3,skewness,geometric_mean,low_whisker,high_whisker,m,v,s,uni_mean
 	
 	
 
 
 # Descriptive stats for Insert sizes
-i_mean,i_stdDev,i_var,i_Q1,i_median,i_Q3,i_skew,i_gmean,i_lwhisker,i_hwhisker,i_uni_mean = stats(inserts)
+i_mean,i_stdDev,i_var,i_Q1,i_median,i_Q3,i_skew,i_gmean,i_lwhisker,i_hwhisker,i_m,i_v,i_s,i_uni_mean = stats(inserts)
 
 print("------ Descriptive stats for Insert Sizes----------")
 print("Normal Mean = %5.5f" % i_mean)
 print("Geometric mean = %5.5f" % i_gmean)
-print("standard deviation = %5.5f" % i_stdDev)
+print("Uniform mean = ", i_uni_mean)
+print("Standard deviation = %5.5f" % i_stdDev)
 print("Variance = %5.5f" % i_var)
 print("1st quartile = %5.5f" % i_Q1)
 print("Median = %5.5f" % i_median)
 print("3rd quartile = %5.5f" % i_Q3)
-print("Skewness = %5.5f" % i_skew)
 print("Lower whisker = %5.5f" % i_lwhisker)
-print("upper whisker = %5.5f" % i_hwhisker)
-print("Uniform mean = ", i_uni_mean)
-
-
-
+print("Upper whisker = %5.5f" % i_hwhisker)
+print("Skewness = %5.5f" % i_skew)
