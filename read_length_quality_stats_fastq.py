@@ -173,14 +173,15 @@ seqs2,quals2 = parseFastq(fastq2)
 read_count1 = len(seqs1)
 read_count2 = len(seqs2)
 
-# read Length thresholds: function call
-R1_le_149,R1_gt_149,R1_le_249,R1_gt_249,R1_le_299,R1_gt_299 = threshold(read1_length)
-R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299 = threshold(read2_length)
-
 
 # average quality scores for each read: function call
 read1_length,quality_scores_R1 = qual_score(quals1)
 read2_length,quality_scores_R2 = qual_score(quals2)
+
+
+# read Length thresholds: function call
+R1_le_149,R1_gt_149,R1_le_249,R1_gt_249,R1_le_299,R1_gt_299 = threshold(read1_length)
+R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299 = threshold(read2_length)
 
 # quality threshold function call: function call
 Q1_lt_30 = Q30(quality_scores_R1)
@@ -204,16 +205,53 @@ s_mean,s_stdDev,s_var,s_Q1,s_median,s_Q3,s_skew,s_gmean,s_lwhisker,s_hwhisker = 
 
 
 # Result lists
-R1 = [["\t",'Stats for R1 Length',"\t",'Stats for R2 Length'],['Normal mean:	',r_mean,"\t",i_mean],['SD:	',r_stdDev,"\t",i_stdDev],['Variance:	',r_var,"\t",i_var],['1st quartile:	',r_Q1,"\t",i_Q1],['Median:	',r_median,"\t",i_median],
-		['3rd quartile:	',r_Q3,"\t",i_Q3],['Skewness:	',r_skew,"\t",i_skew],['Geormetric mean:	',r_gmean,"\t",i_gmean],['Lower whisker:	',r_lwhisker,"\t",i_lwhisker],['Higher whisker:	',r_hwhisker,"\t",i_hwhisker],
-		['Reads <= 149:	',R1_le_149,"\t",R2_le_149],['Reads > 149:	',R1_gt_149,"\t",R2_gt_149],['Reads <= 249:	',R1_le_249,"\t",R2_le_249],['Reads > 249:	',R1_gt_249,"\t",R2_gt_249],
-		['Reads <= 299:	',R1_le_299,"\t",R2_le_299],['Reads > 299:	',R1_gt_299,"\t",R2_gt_299]]
+if(R1_le_149 > 0 and R1_gt_149 > 0):
+	perc_R1_le_149 = (R1_le_149/read_count1) * 100
+	perc_R1_gt_149 = (R1_gt_149/read_count1) * 100
+	perc_R2_le_149 = (R2_le_149/read_count2) * 100
+	perc_R2_gt_149 = (R2_gt_149/read_count2) * 100
+	
+	R1 = [["\t",'Stats for R1 Length',"\t",'Stats for R2 Length'],['Normal mean:	',r_mean,"\t",i_mean],['SD:	',r_stdDev,"\t",i_stdDev],['Variance:	',r_var,"\t",i_var],['1st quartile:	',r_Q1,"\t",i_Q1],['Median:	',r_median,"\t",i_median],
+			['3rd quartile:	',r_Q3,"\t",i_Q3],['Skewness:	',r_skew,"\t",i_skew],['Geormetric mean:	',r_gmean,"\t",i_gmean],['Lower whisker:	',r_lwhisker,"\t",i_lwhisker],['Higher whisker:	',r_hwhisker,"\t",i_hwhisker],
+			['Reads <= 149:	',R1_le_149,"\t",R2_le_149],['Reads > 149:	',R1_gt_149,"\t",R2_gt_149],['Percent counts for reads <= 149:	',perc_R1_le_149,"\t",perc_R2_le_149],['Percent counts for reads > 149:	',perc_R1_gt_149,"\t",perc_R2_gt_149]]
 
 
-Q1 = [["\t",'Stats for R1 Quality',"\t",'Stats for R2 Quality'],['Normal mean:	',q_mean,"\t",s_mean],['SD:	',q_stdDev,"\t",s_stdDev],['Variance:	',q_var,"\t",s_var],['1st quartile:	',q_Q1,"\t",s_Q1],['Median:	',q_median,"\t",s_median],['3rd quartile:	',q_Q3,"\t",s_Q3],
-		['Skewness:	',q_skew,"\t",s_skew],['Geometric mean:	',q_gmean,"\t",s_gmean],['Lower whisker:	',q_lwhisker,"\t",s_lwhisker],
-		['Higher whisker:	',q_hwhisker,"\t",s_hwhisker],['Reads count:	',read_count1,"\t",read_count2],['Reads below Q30:	',Q1_lt_30,"\t",Q2_lt_30],['Percentage of reads below Q30:	',percent_reads_lt_30_R1,"\t",percent_reads_lt_30_R2],
-		['Ambiguous bases:	',countN1,"\t",countN2]]
+	Q1 = [["\t",'Stats for R1 Quality',"\t",'Stats for R2 Quality'],['Normal mean:	',q_mean,"\t",s_mean],['SD:	',q_stdDev,"\t",s_stdDev],['Variance:	',q_var,"\t",s_var],['1st quartile:	',q_Q1,"\t",s_Q1],['Median:	',q_median,"\t",s_median],['3rd quartile:	',q_Q3,"\t",s_Q3],
+			['Skewness:	',q_skew,"\t",s_skew],['Geometric mean:	',q_gmean,"\t",s_gmean],['Lower whisker:	',q_lwhisker,"\t",s_lwhisker],
+			['Higher whisker:	',q_hwhisker,"\t",s_hwhisker],['Reads count:	',read_count1,"\t",read_count2],['Reads below Q30:	',Q1_lt_30,"\t",Q2_lt_30],['Percentage of reads below Q30:	',percent_reads_lt_30_R1,"\t",percent_reads_lt_30_R2],
+			['Ambiguous bases:	',countN1,"\t",countN2]]
+			
+elif(R1_le_249 > 0 and R1_gt_249 > 0 ):
+	perc_R1_le_249 = (R1_le_249/read_count1) * 100
+	perc_R1_gt_249 = (R1_gt_249/read_count1) * 100
+	perc_R2_le_249 = (R2_le_249/read_count2) * 100
+	perc_R2_gt_249 = (R2_gt_249/read_count2) * 100
+	
+	R1 = [["\t",'Stats for R1 Length',"\t",'Stats for R2 Length'],['Normal mean:	',r_mean,"\t",i_mean],['SD:	',r_stdDev,"\t",i_stdDev],['Variance:	',r_var,"\t",i_var],['1st quartile:	',r_Q1,"\t",i_Q1],['Median:	',r_median,"\t",i_median],
+			['3rd quartile:	',r_Q3,"\t",i_Q3],['Skewness:	',r_skew,"\t",i_skew],['Geormetric mean:	',r_gmean,"\t",i_gmean],['Lower whisker:	',r_lwhisker,"\t",i_lwhisker],['Higher whisker:	',r_hwhisker,"\t",i_hwhisker],
+			['Reads <= 249:	',R1_le_249,"\t",R2_le_249],['Reads > 249:	',R1_gt_249,"\t",R2_gt_249],['Percent counts for reads <= 249:	',perc_R1_le_249,"\t",perc_R2_le_249],['Percent counts for reads > 249:	',perc_R1_gt_249,"\t",perc_R2_gt_249]]
+
+
+	Q1 = [["\t",'Stats for R1 Quality',"\t",'Stats for R2 Quality'],['Normal mean:	',q_mean,"\t",s_mean],['SD:	',q_stdDev,"\t",s_stdDev],['Variance:	',q_var,"\t",s_var],['1st quartile:	',q_Q1,"\t",s_Q1],['Median:	',q_median,"\t",s_median],['3rd quartile:	',q_Q3,"\t",s_Q3],
+			['Skewness:	',q_skew,"\t",s_skew],['Geometric mean:	',q_gmean,"\t",s_gmean],['Lower whisker:	',q_lwhisker,"\t",s_lwhisker],
+			['Higher whisker:	',q_hwhisker,"\t",s_hwhisker],['Reads count:	',read_count1,"\t",read_count2],['Reads below Q30:	',Q1_lt_30,"\t",Q2_lt_30],['Percentage of reads below Q30:	',percent_reads_lt_30_R1,"\t",percent_reads_lt_30_R2],
+			['Ambiguous bases:	',countN1,"\t",countN2]]
+			
+else:
+	perc_R1_le_299 = (R1_le_299/read_count1) * 100
+	perc_R1_gt_299 = (R1_gt_299/read_count1) * 100
+	perc_R2_le_299 = (R2_le_299/read_count2) * 100
+	perc_R2_gt_299 = (R2_gt_299/read_count2) * 100
+	
+	R1 = [["\t",'Stats for R1 Length',"\t",'Stats for R2 Length'],['Normal mean:	',r_mean,"\t",i_mean],['SD:	',r_stdDev,"\t",i_stdDev],['Variance:	',r_var,"\t",i_var],['1st quartile:	',r_Q1,"\t",i_Q1],['Median:	',r_median,"\t",i_median],
+			['3rd quartile:	',r_Q3,"\t",i_Q3],['Skewness:	',r_skew,"\t",i_skew],['Geormetric mean:	',r_gmean,"\t",i_gmean],['Lower whisker:	',r_lwhisker,"\t",i_lwhisker],['Higher whisker:	',r_hwhisker,"\t",i_hwhisker],
+			['Reads <= 299:	',R1_le_299,"\t",R2_le_299],['Reads > 299:	',R1_gt_299,"\t",R2_gt_299],['Percent counts for reads <= 299:	',perc_R1_le_299,"\t",perc_R2_le_299],['Percent counts for reads > 299:	',perc_R1_gt_299,"\t",perc_R2_gt_299]]
+
+
+	Q1 = [["\t",'Stats for R1 Quality',"\t",'Stats for R2 Quality'],['Normal mean:	',q_mean,"\t",s_mean],['SD:	',q_stdDev,"\t",s_stdDev],['Variance:	',q_var,"\t",s_var],['1st quartile:	',q_Q1,"\t",s_Q1],['Median:	',q_median,"\t",s_median],['3rd quartile:	',q_Q3,"\t",s_Q3],
+			['Skewness:	',q_skew,"\t",s_skew],['Geometric mean:	',q_gmean,"\t",s_gmean],['Lower whisker:	',q_lwhisker,"\t",s_lwhisker],
+			['Higher whisker:	',q_hwhisker,"\t",s_hwhisker],['Reads count:	',read_count1,"\t",read_count2],['Reads below Q30:	',Q1_lt_30,"\t",Q2_lt_30],['Percentage of reads below Q30:	',percent_reads_lt_30_R1,"\t",percent_reads_lt_30_R2],
+			['Ambiguous bases:	',countN1,"\t",countN2]]
 
 	
 for a,b,c,d in R1:
