@@ -10,7 +10,6 @@ import numpy as np
 import sys
 from scipy.stats import skew,mstats
 
-
 # ------------------------------------------ DECLARATIONS AND INITIALIZATIONS ------------------------------------------------#
 quality_scores_R1 = []
 quality_scores_R2 = []
@@ -35,6 +34,10 @@ countN1 = 0
 countN2 = 0
 Q1_lt_30 = 0
 Q2_lt_30 = 0
+R1 = []
+R2 = []
+Q1 = []
+Q2 = []
 
 # ------------------------------------------ FUNCTIONS ------------------------------------------------#
 # To parse fastq file
@@ -153,40 +156,6 @@ def threshold(lengths):
 	return len_le_149,len_gt_149,len_le_249,len_gt_249,len_le_299,len_gt_299
 	
 	
-def Print_read_length(mean,stdDev,var,Q1,median,Q3,skew,gmean,lwhisker,hwhisker,len_le_149,len_gt_149,len_le_249,len_gt_249,len_le_299,len_gt_299):
-	print("Normal Mean = %5.5f" % mean)
-	print("Geometric mean = %5.5f" % gmean)
-	print("standard deviation = %5.5f" % stdDev)
-	print("Variance = %5.5f" % var)
-	print("1st quartile = %5.5f" % Q1)
-	print("Median = %5.5f" % median)
-	print("3rd quartile = %5.5f" % Q3)
-	print("Skewness = %5.5f" % skew)
-	print("Lower whisker = %5.5f" % lwhisker)
-	print("upper whisker = %5.5f" % hwhisker)
-	print("Reads > 149 = %d" % len_gt_149)
-	print("Reads <= 149 = %d" % len_le_149)
-	print("Reads > 249 = %d" % len_gt_249)
-	print("Reads <= 249 = %d" % len_le_249)
-	print("Reads > 299 = %d" % len_gt_299)
-	print("Reads <= 299 = %d" % len_le_299)
-	
-	
-def Print_read_qual(mean,stdDev,var,Q1,median,Q3,skew,gmean,lwhisker,hwhisker,qual_lt_30,perc_qual_lt_30,count_ambi):
-	print("Normal Mean = %5.5f" % mean)
-	print("Geometric mean = %5.5f" % gmean)
-	print("standard deviation = %5.5f" % stdDev)
-	print("Variance = %5.5f" % var)
-	print("1st quartile = %5.5f" % Q1)
-	print("Median = %5.5f" % median)
-	print("3rd quartile = %5.5f" % Q3)
-	print("Skewness = %5.5f" % skew)
-	print("Lower whisker = %5.5f" % lwhisker)
-	print("upper whisker = %5.5f" % hwhisker)
-	print("Reads with quality less than 30 = %d" % qual_lt_30)
-	print("Percentage of Reads with quality less than 30 = %5.5f" % perc_qual_lt_30)
-	print("Ambiguous base counts = %d" % count_ambi)
-	
 	
 # ---------------------------------------------------- MAIN ----------------------------------------------------------------- #	
 
@@ -194,54 +163,63 @@ def Print_read_qual(mean,stdDev,var,Q1,median,Q3,skew,gmean,lwhisker,hwhisker,qu
 fastq1 = sys.argv[1]
 fastq2 = sys.argv[2]
 
-# function call
+# total number of reads
+read_count1 = len(seqs1)
+read_count2 = len(seqs2)	
+
+# Parsing fastq: function call
 seqs1,quals1 = parseFastq(fastq1)	# takes in fastq file as an input from command line and passes it as an argument to parseFastq function. Returns sequences and qualities and stores in seqs & quals
 seqs2,quals2 = parseFastq(fastq2)
-
-
 	
-print("Number of reads for R1_file is %d"  % len(seqs1))
-print("Number of reads for R2_file is %d"  % len(seqs2))		
 
-
-# read Length thresholds 
+# read Length thresholds: function call
 R1_le_149,R1_gt_149,R1_le_249,R1_gt_249,R1_le_299,R1_gt_299 = threshold(read1_length)
 R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299 = threshold(read2_length)
 
 
-# average quality scores for each read
+# average quality scores for each read: function call
 read1_length,quality_scores_R1 = qual_score(quals1)
 read2_length,quality_scores_R2 = qual_score(quals2)
 
-# quality threshold function call
+# quality threshold function call: function call
 Q1_lt_30 = Q30(quality_scores_R1)
 Q2_lt_30 = Q30(quality_scores_R2)
 
 percent_reads_lt_30_R1 = Q1_lt_30/len(seqs1) * 100
 percent_reads_lt_30_R2 = Q2_lt_30/len(seqs2) * 100
 
-# Ambiguous base function call
+# Ambiguous base function call: function call
 countN1 = countN(seqs1)
 countN2 = countN(seqs2)
 
-# Descriptive stats for read1 length
+# Descriptive stats for read1 length: function call
 r_mean,r_stdDev,r_var,r_Q1,r_median,r_Q3,r_skew,r_gmean,r_lwhisker,r_hwhisker = stats(read1_length)
-# Descriptive stats for read2 length
 i_mean,i_stdDev,i_var,i_Q1,i_median,i_Q3,i_skew,i_gmean,i_lwhisker,i_hwhisker = stats(read2_length)
 
 
-# Descriptive stats for Q1 quality
+# Descriptive stats for Q1 quality: function call
 q_mean,q_stdDev,q_var,q_Q1,q_median,q_Q3,q_skew,q_gmean,q_lwhisker,q_hwhisker = stats(quality_scores_R1)
-# Descriptive stats for Q2 quality
 s_mean,s_stdDev,s_var,s_Q1,s_median,s_Q3,s_skew,s_gmean,s_lwhisker,s_hwhisker = stats(quality_scores_R2)
 
 
-# calling Print function
-print("------ Descriptive stats for R1 Lengths----------")
-Print_read_length(r_mean,r_stdDev,r_var,r_Q1,r_median,r_Q3,r_skew,r_gmean,r_lwhisker,r_hwhisker,R1_le_149,R1_gt_149,R1_le_249,R1_gt_249,R1_le_299,R1_gt_299) # R1 stats
-print("------ Descriptive stats for R2 Lengths----------")
-Print_read_length(i_mean,i_stdDev,i_var,i_Q1,i_median,i_Q3,i_skew,i_gmean,i_lwhisker,i_hwhisker,R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299) # R2 stats
-print("------ Descriptive stats for R1 Quality----------")
-Print_read_qual(q_mean,q_stdDev,q_var,q_Q1,q_median,q_Q3,q_skew,q_gmean,q_lwhisker,q_hwhisker,Q1_lt_30,percent_reads_lt_30_R1,countN1)	# Q1 stats
-print("------ Descriptive stats for R2 Quality----------")
-Print_read_qual(s_mean,s_stdDev,s_var,s_Q1,s_median,s_Q3,s_skew,s_gmean,s_lwhisker,s_hwhisker,Q2_lt_30,percent_reads_lt_30_R2,countN2)	# Q2 stats
+# Result lists
+R1 = [["\t",'Stats for R1 Length',"\t",'Stats for R2 Length'],['mean:	',r_mean,"\t",i_mean],['SD:	',r_stdDev,"\t",i_stdDev],['Variance:	',r_var,"\t",i_var],['1st quartile:	',r_Q1,"\t",i_Q1],['Median:	',r_median,"\t",i_median],
+		['3rd quartile:	',r_Q3,"\t",i_Q3],['Skewness:	',r_skew,"\t",i_skew],['Geormetric mean:	',r_gmean,"\t",i_gmean],['Lower whisker:	',r_lwhisker,"\t",i_lwhisker],['Higher whisker:	',r_hwhisker,"\t",i_hwhisker],
+		['Reads <= 149:	',R1_le_149,"\t",R2_le_149],['Reads > 149:	',R1_gt_149,"\t",R2_gt_149],['Reads <= 249:	',R1_le_249,"\t",R2_le_249],['Reads > 249:	',R1_gt_249,"\t",R2_gt_249],
+		['Reads <= 299:	',R1_le_299,"\t",R2_le_299],['Reads > 299:	',R1_gt_299,"\t",R2_gt_299]]
+
+
+Q1 = [["\t",'Stats for R1 Quality',"\t",'Stats for R2 Quality'],['mean::	',q_mean,"\t",s_mean],['SD:	',q_stdDev,"\t",s_stdDev],['Variance:	',q_var,"\t",s_var],['1st quartile:	',q_Q1,"\t",s_Q1],['Median:	',q_median,"\t",s_median],['3rd quartile:	',q_Q3,"\t",s_Q3],
+		['Skewness:	',q_skew,"\t",s_skew],['Geometric mean:	',q_gmean,"\t",s_gmean],['Lower whisker:	',q_lwhisker,"\t",s_lwhisker],
+		['Higher whisker:	',q_hwhisker,"\t",s_hwhisker],['Reads count:	',read_count1,"\t",read_count2],['Reads below Q30:	',Q1_lt_30,"\t",Q2_lt_30],['Percentage of reads below Q30:	',percent_reads_lt_30_R1,"\t",percent_reads_lt_30_R2],
+		['Ambiguous bases:	',countN1,"\t",countN2]]
+
+	
+for a,b,c,d in R1:
+	print('%s %s %s %s' %(a, b, c, d))
+
+print("\n-----------------------------------------------------------\n")
+	
+for a,b,c,d in Q1:
+	print('%s %s %s %s' %(a, b, c, d))	
+
