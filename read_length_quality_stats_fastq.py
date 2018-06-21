@@ -7,10 +7,9 @@
 # Usage: ./read_length_quality_and_stats_fastq.py 
 
 import numpy as np
-import sys
 from scipy.stats import skew,mstats
 import glob
-import re
+
 
 # ------------------------------------------ DECLARATIONS AND INITIALIZATIONS ------------------------------------------------#
 quality_scores_R1 = []
@@ -329,12 +328,10 @@ for f1,f2 in zip(file1,file2):
 	read1_length,quality_scores_R1 = qual_score(quals1)
 	read2_length,quality_scores_R2 = qual_score(quals2)
 	
-	
 
 	# read Length thresholds: function call
 	R1_le_149,R1_gt_149,R1_le_249,R1_gt_249,R1_le_299,R1_gt_299,tot_len1_le_149,tot_len1_gt_149,tot_len1_le_249,tot_len1_gt_249,tot_len1_le_299,tot_len1_gt_299 = threshold(read1_length)
 	R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299,tot_len2_le_149,tot_len2_gt_149,tot_len2_le_249,tot_len2_gt_249,tot_len2_le_299,tot_len2_gt_299 = threshold(read2_length)
-	
 	
 	
 	R_le_149.extend((R1_le_149,R2_le_149))
@@ -374,7 +371,6 @@ for f1,f2 in zip(file1,file2):
 	G_mean.extend((r_gmean,i_gmean))
 
 	
-	
 	# Descriptive stats for Q1 quality: function call
 	q_mean,q_stdDev,q_var,q_Q1,q_median,q_Q3,q_skew,q_gmean,q_lwhisker,q_hwhisker = stats(quality_scores_R1)
 	s_mean,s_stdDev,s_var,s_Q1,s_median,s_Q3,s_skew,s_gmean,s_lwhisker,s_hwhisker = stats(quality_scores_R2)
@@ -413,13 +409,6 @@ for f1,f2 in zip(file1,file2):
 		
 		final_avg_length.extend((avg_length_1,avg_length_2))
 		
-		
-		
-		R1 = [["\t",'Stats for R1 Length',"\t",'Stats for R2 Length'],['Normal mean:	',r_mean,"\t",i_mean],['SD:	',r_stdDev,"\t",i_stdDev],['Variance:	',r_var,"\t",i_var],['1st quartile:	',r_Q1,"\t",i_Q1],['Median:	',r_median,"\t",i_median],
-				['3rd quartile:	',r_Q3,"\t",i_Q3],['Skewness:	',r_skew,"\t",i_skew],['Geormetric mean:	',r_gmean,"\t",i_gmean],['Lower whisker:	',r_lwhisker,"\t",i_lwhisker],['Higher whisker:	',r_hwhisker,"\t",i_hwhisker],
-				['Reads <= 149:	',R1_le_149,"\t",R2_le_149],['Reads > 149:	',R1_gt_149,"\t",R2_gt_149],['Percent counts for reads <= 149:	',perc_R1_le_149,"\t",perc_R2_le_149],['Percent counts for reads > 149:	',perc_R1_gt_149,"\t",perc_R2_gt_149],
-				['Average quality of reads above and below 149:	',avg_quality_1,"\t",avg_quality_2],['Average length of reads above and below 149:	',avg_length_1,"\t",avg_length_2]]
-
 
 				
 	elif(r_median < 252 and i_median < 252 ):
@@ -446,15 +435,6 @@ for f1,f2 in zip(file1,file2):
 		
 		final_avg_length.extend((avg_length_1,avg_length_2))
 		
-		
-		R1 = [["\t",'Stats for R1 Length',"\t",'Stats for R2 Length'],['Normal mean:	',r_mean,"\t",i_mean],['SD:	',r_stdDev,"\t",i_stdDev],['Variance:	',r_var,"\t",i_var],['1st quartile:	',r_Q1,"\t",i_Q1],['Median:	',r_median,"\t",i_median],
-				['3rd quartile:	',r_Q3,"\t",i_Q3],['Skewness:	',r_skew,"\t",i_skew],['Geormetric mean:	',r_gmean,"\t",i_gmean],['Lower whisker:	',r_lwhisker,"\t",i_lwhisker],['Higher whisker:	',r_hwhisker,"\t",i_hwhisker],
-				['Reads <= 249:	',R1_le_249,"\t",R2_le_249],['Reads > 249:	',R1_gt_249,"\t",R2_gt_249],['Percent counts for reads <= 249:	',perc_R1_le_249,"\t",perc_R2_le_249],['Percent counts for reads > 249:	',perc_R1_gt_249,"\t",perc_R2_gt_249],
-				['Average quality of reads above and below 249:	',avg_quality_1,"\t",avg_quality_2],['Average length of reads above and below 249:	',avg_length_1,"\t",avg_length_2]]
-
-		
-	
-		
 				
 	else:
 		perc_R1_le_299 = (R1_le_299/read_count1) * 100
@@ -477,12 +457,6 @@ for f1,f2 in zip(file1,file2):
 		avg_length_2 = (tot_len2_le_299 + tot_len2_gt_299) / (R2_le_299 + R2_gt_299)
 		
 		final_avg_length.extend((avg_length_1,avg_length_2))
-		
-		R1 = [["\t",'Stats for R1 Length',"\t",'Stats for R2 Length'],['Normal mean:	',r_mean,"\t",i_mean],['SD:	',r_stdDev,"\t",i_stdDev],['Variance:	',r_var,"\t",i_var],['1st quartile:	',r_Q1,"\t",i_Q1],['Median:	',r_median,"\t",i_median],
-				['3rd quartile:	',r_Q3,"\t",i_Q3],['Skewness:	',r_skew,"\t",i_skew],['Geormetric mean:	',r_gmean,"\t",i_gmean],['Lower whisker:	',r_lwhisker,"\t",i_lwhisker],['Higher whisker:	',r_hwhisker,"\t",i_hwhisker],
-				['Reads <= 299:	',R1_le_299,"\t",R2_le_299],['Reads > 299:	',R1_gt_299,"\t",R2_gt_299],['Percent counts for reads <= 299:	',perc_R1_le_299,"\t",perc_R2_le_299],['Percent counts for reads > 299:	',perc_R1_gt_299,"\t",perc_R2_gt_299],
-				['Average quality of reads above and below 299:	',avg_quality_1,"\t",avg_quality_2],['Average length of reads above and below 299:	',avg_length_1,"\t",avg_length_2]]
-
 	
 	
 print(*header, sep='\t')
