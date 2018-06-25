@@ -562,11 +562,6 @@ for f1,f2 in zip(file1,file2):
 		
 		R_le_149.extend((R1_le_149,R2_le_149))
 		R_gt_149.extend((R1_gt_149,R2_gt_149))
-		R_le_249.extend((R1_le_249,R2_le_249))
-		R_gt_249.extend((R1_gt_249,R2_gt_249))
-		R_le_299.extend((R1_le_299,R2_le_299))
-		R_gt_299.extend((R1_gt_299,R2_gt_299))
-		
 		
 		
 		perc_R1_le_149 = (R1_le_149/read_count1) * 100
@@ -663,14 +658,11 @@ for f1,f2 in zip(file1,file2):
 		# read Length thresholds: function call
 		R1_le_149,R1_gt_149,R1_le_249,R1_gt_249,R1_le_299,R1_gt_299,tot_len1_le_149,tot_len1_gt_149,tot_len1_le_249,tot_len1_gt_249,tot_len1_le_299,tot_len1_gt_299 = threshold(read1_length)
 		R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299,tot_len2_le_149,tot_len2_gt_149,tot_len2_le_249,tot_len2_gt_249,tot_len2_le_299,tot_len2_gt_299 = threshold(read2_length)
+	
 		
-		
-		R_le_149.extend((R1_le_149,R2_le_149))
-		R_gt_149.extend((R1_gt_149,R2_gt_149))
 		R_le_249.extend((R1_le_249,R2_le_249))
 		R_gt_249.extend((R1_gt_249,R2_gt_249))
-		R_le_299.extend((R1_le_299,R2_le_299))
-		R_gt_299.extend((R1_gt_299,R2_gt_299))
+		
 		
 		
 		
@@ -772,13 +764,8 @@ for f1,f2 in zip(file1,file2):
 		R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299,tot_len2_le_149,tot_len2_gt_149,tot_len2_le_249,tot_len2_gt_249,tot_len2_le_299,tot_len2_gt_299 = threshold(read2_length)
 		
 		
-		R_le_149.extend((R1_le_149,R2_le_149))
-		R_gt_149.extend((R1_gt_149,R2_gt_149))
-		R_le_249.extend((R1_le_249,R2_le_249))
-		R_gt_249.extend((R1_gt_249,R2_gt_249))
 		R_le_299.extend((R1_le_299,R2_le_299))
 		R_gt_299.extend((R1_gt_299,R2_gt_299))
-		
 		
 		
 		perc_R1_le_299 = (R1_le_299/read_count1) * 100
