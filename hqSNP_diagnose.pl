@@ -20,7 +20,7 @@ $ENV{PATH} = "$ENV{PATH}:$RealBin/../../scripts";
 
 # Global variables
 my @maskingHeaders=qw(alignment ambiguous_base_count ambiguous_base_percent GC% contig_length);
-my @bamHeaders=qw(bam total_reads mapped_reads mapped_reads_ge30 unmapped_reads percent_mapped percent_mapped_gt30 proper_pairs inward_pairs outward_pairs pairs_with_other_orientation percentage_proper_pairs insert_size_avg number_sites_with_coverage_lt20 breadth_coverage total_sites_covered_ge20 avg_coverage_per_site);
+my @bamHeaders=qw(bam total_reads mapped_reads mapped_reads_ge30 unmapped_reads percent_mapped percent_mapped_gt30 proper_pairs inward_pairs outward_pairs pairs_with_other_orientation percentage_proper_pairs insert_size_avg number_sites_with_coverage_lt20 breadth_coverage total_sites_covered_ge20 avg_coverage_per_site perc_reference_coverage);
 my @vcfHeaders=qw(vcf PASS AF0.95 AF0.95;str10 DP20 AF0.95;DP20 DP20;AF0.95 DP20;AF0.95;str10 AF0.95;DP20;str10 AF0.95;isIndel AF0.95;RF0.95 AF0.95;isIndel;RF0.95 isIndel isIndel;AF0.95 RF0.95 isIndel;RF0.95 str10 str10;AF0.95 str10;DP20;AF0.95 indelError);
 
 # Run the main subroutine, and the exit code for the script
@@ -218,6 +218,8 @@ sub bamInfo{
   $bamInfo{total_sites_covered_ge20}=$sites_ge20;
   $bamInfo{breadth_coverage}=$bam_sites;
   $bamInfo{avg_coverage_per_site}=sprintf("%0.2f",$coverage_count/$total_ref_bases);
+  $bamInfo{perc_reference_coverage}= ((($total_ref_bases - $sites_lt20)/$total_ref_bases)*100);
+
 
   return \%bamInfo;
 }
