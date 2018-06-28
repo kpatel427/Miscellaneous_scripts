@@ -10,7 +10,8 @@
 import numpy as np
 from scipy.stats import skew,mstats
 import glob
-
+import os
+import re
 
 # ------------------------------------------ DECLARATIONS AND INITIALIZATIONS ------------------------------------------------#
 quality_scores_R1 = []
@@ -40,9 +41,12 @@ R1 = []
 R2 = []
 Q1 = []
 Q2 = []
-dic_149_bucket = {}
-dic_249_bucket = {}
-dic_299_bucket = {}
+dic_le_149_bucket = {}
+dic_gt_149_bucket = {}
+dic_le_249_bucket = {}
+dic_gt_249_bucket = {}
+dic_le_299_bucket = {}
+dic_gt_299_bucket = {}
 file1 = []
 file2 = []
 tot_len1_gt_149 = 0
@@ -56,6 +60,125 @@ tot_len2_gt_249 = 0
 tot_len2_le_299 = 0
 tot_len2_gt_299 = 0
 
+
+files_149 = [] #Stores paired read files
+files_249 = [] #Stores paired read files
+files_299 = [] #Stores paired read files
+# Following lists are to store all results for 149bp bucket
+N_mean_149 = ["Mean:"]
+SD_149 = ["Std Deviation:"]
+Variance_149 = ["Variance"]
+median_149 = ["Median"]
+Q1_149 = ["1st Quartile:"]
+Q3_149 = ["3rd Quartile:"]
+lwhisker_149 = ["Lower whisker:"]
+hwhisker_149 = ["Upper Whisker:"]
+Skew_149 = ["Skewness:"]
+G_mean_149 = ["Geometric Mean:"]
+
+qual_N_mean_149 = ["Mean:"]
+qual_SD_149 = ["Std Deviation:"]
+qual_Variance_149 = ["Variance:"]
+qual_median_149 = ["Median:"]
+qual_Q1_149 = ["1st Quartile:"]
+qual_Q3_149 = ["3rd Quartile:"]
+qual_lwhisker_149 = ["Lower whisker:"]
+qual_hwhisker_149 = ["Upper Whisker:"]
+qual_skew_149 = ["Skewness:"]
+qual_G_mean_149 = ["Geometric Mean:"]
+
+# Following lists are to store all results for 249bp bucket
+N_mean_249 = ["Mean:"]
+SD_249 = ["Std Deviation:"]
+Variance_249 = ["Variance"]
+median_249 = ["Median"]
+Q1_249 = ["1st Quartile:"]
+Q3_249 = ["3rd Quartile:"]
+lwhisker_249 = ["Lower whisker:"]
+hwhisker_249 = ["Upper Whisker:"]
+Skew_249 = ["Skewness:"]
+G_mean_249 = ["Geometric Mean:"]
+
+qual_N_mean_249 = ["Mean:"]
+qual_SD_249 = ["Std Deviation:"]
+qual_Variance_249 = ["Variance:"]
+qual_median_249 = ["Median:"]
+qual_Q1_249 = ["1st Quartile:"]
+qual_Q3_249 = ["3rd Quartile:"]
+qual_lwhisker_249 = ["Lower whisker:"]
+qual_hwhisker_249 = ["Upper Whisker:"]
+qual_skew_249 = ["Skewness:"]
+qual_G_mean_249 = ["Geometric Mean:"]
+
+# Following lists are to store all results for 299bp bucket
+N_mean_299 = ["Mean:"]
+SD_299 = ["Std Deviation:"]
+Variance_299 = ["Variance"]
+median_299 = ["Median"]
+Q1_299 = ["1st Quartile:"]
+Q3_299 = ["3rd Quartile:"]
+lwhisker_299 = ["Lower whisker:"]
+hwhisker_299 = ["Upper Whisker:"]
+Skew_299 = ["Skewness:"]
+G_mean_299 = ["Geometric Mean:"]
+
+qual_N_mean_299 = ["Mean:"]
+qual_SD_299 = ["Std Deviation:"]
+qual_Variance_299 = ["Variance:"]
+qual_median_299 = ["Median:"]
+qual_Q1_299 = ["1st Quartile:"]
+qual_Q3_299 = ["3rd Quartile:"]
+qual_lwhisker_299 = ["Lower whisker:"]
+qual_hwhisker_299 = ["Upper Whisker:"]
+qual_skew_299 = ["Skewness:"]
+qual_G_mean_299 = ["Geometric Mean:"]
+
+total_no_reads_149 = ["Read count:"]
+total_no_reads_249 = ["Read count:"]
+total_no_reads_299 = ["Read count:"]
+qual_lt_30_149 = ["Reads < Q30:"]
+qual_lt_30_249 = ["Reads < Q30:"]
+qual_lt_30_299 = ["Reads < Q30:"]
+perc_qual_lt_30_149 = ["Percentage reads < Q30"]
+perc_qual_lt_30_249 = ["Percentage reads < Q30"]
+perc_qual_lt_30_299 = ["Percentage reads < Q30"]
+ambi_calls_149 = ["Amibguous base calls:"]
+ambi_calls_249 = ["Amibguous base calls:"]
+ambi_calls_299 = ["Amibguous base calls:"]
+
+
+R_le_149 = ["Reads <= 149:"]
+R_gt_149 = ["Reads > 149:"]
+R_le_249 = ["Reads <= 249:"]
+R_gt_249 = ["Reads > 249:"]
+R_le_299 = ["Reads <= 299:"]
+R_gt_299 = ["Reads > 299:"]
+
+r_median = 0
+i_median = 0
+
+final_perc_R1_le_149 = ["% Reads <= 149:"]
+final_perc_R1_gt_149 = ["% Reads > 149:"]
+
+final_perc_R1_le_249 = ["% Reads <= 249:"]
+final_perc_R1_gt_249 = ["% Reads > 249:"]
+
+final_perc_R1_le_299 = ["% Reads <= 299:"]
+final_perc_R1_gt_299 = ["% Reads > 299:"]
+
+
+final_avg_quality_le_149 = ["Average Quality <= 149:"]
+final_avg_quality_gt_149 = ["Average Quality > 149:"]
+final_avg_length_le_149 = ["Average Length <= 149"]
+final_avg_length_gt_149 = ["Average Length > 149"]
+final_avg_quality_le_249 = ["Average Quality <= 249:"]
+final_avg_quality_gt_249 = ["Average Quality > 249:"]
+final_avg_length_le_249 = ["Average Length <= 149"]
+final_avg_length_gt_249 = ["Average Length > 149"]
+final_avg_quality_le_299 = ["Average Quality <= 299:"]
+final_avg_quality_gt_299 = ["Average Quality > 299:"]
+final_avg_length_le_299 = ["Average Length <= 299"]
+final_avg_length_gt_299 = ["Average Length > 299"]
 
 
 # ------------------------------------------ FUNCTIONS ------------------------------------------------#
@@ -165,27 +288,31 @@ def threshold(lengths):
 	tot_len_le_299 = 0
 	tot_len_gt_299 = 0
 	
+	
+	
 	for x in lengths:
 		if(x <= 149):
 			len_le_149 += 1		# number of reads less than 149
 			tot_len_le_149 += x	# Total length of all reads less than 149
+			
 		elif(x < 245):
-			len_gt_149 += 1
 			tot_len_gt_149 += x
+		
 		elif(x <= 249):
 			len_le_249 += 1
 			tot_len_le_249 += x
+			
 		elif(x < 295):
-			len_gt_249 += 1
 			tot_len_gt_249 += x
+		
 		elif(x <= 299):
 			len_le_299 += 1
 			tot_len_le_299 += x
+		
 		elif(x > 299):
-			len_gt_299 += 1
 			tot_len_gt_299 += x
-
-	return len_le_149,len_gt_149,len_le_249,len_gt_249,len_le_299,len_gt_299,tot_len_le_149,tot_len_gt_149,tot_len_le_249,tot_len_gt_249,tot_len_le_299,tot_len_gt_299
+		
+	return len_le_149,len_le_249,len_le_299,tot_len_le_149,tot_len_le_249,tot_len_le_299,tot_len_gt_149,tot_len_gt_249,tot_len_gt_299
 	
 
 
@@ -194,12 +321,18 @@ def avg_qual_score(read_length,quality_score):
 
 	for l,q in zip(read_length,quality_score):
 
-		if(l >= 145 and l < 245): # for lengths above and below 149
-			dic_149_bucket[l] = q
-		elif(l >= 245 and l < 295): # for lengths above and below 249	
-			dic_249_bucket[l] = q
-		elif(l >= 295):	# for lengths equal to or greater than 299
-			dic_299_bucket[l] = q
+		if(l <= 149): # for lengths le 149
+			dic_le_149_bucket[l] = q
+		elif(l > 149): # for lengths gt 149
+			dic_gt_149_bucket[l] = q
+		elif(l <= 249): # for lengths le 249	
+			dic_le_249_bucket[l] = q
+		elif(l > 249): # for lengths gt 249	
+			dic_gt_249_bucket[l] = q
+		elif(l <= 299):	# for lengths le 299
+			dic_le_299_bucket[l] = q
+		elif(l > 299):	# for lengths gt 299
+			dic_gt_299_bucket[l] = q
 		
 
 	sum = 0
@@ -207,29 +340,44 @@ def avg_qual_score(read_length,quality_score):
 	avg_quality = 0
 
 	
-	if(len(dic_149_bucket) > 0):
-		for k,v in dic_149_bucket.items():
+	if(len(dic_le_149_bucket) > 0 and len(dic_gt_149_bucket) > 0):
+		for k,v in dic_le_149_bucket.items():
 			sum += v
 			num += 1
-			avg_quality = (sum/num)
-		
-		return avg_quality
-		
-	elif(len(dic_249_bucket) > 0):
-		for k,v in dic_249_bucket.items():
-			sum += v
-			num += 1
-			avg_quality = (sum/num)
+			avg_quality_le_149 = (sum/num)
 			
-		return avg_quality
-		
-	elif(len(dic_299_bucket) > 0):
-		for k,v in dic_299_bucket.items():
+		for k,v in dic_gt_149_bucket.items():
 			sum += v
 			num += 1
-			avg_quality = (sum/num)
+			avg_quality_gt_149 = (sum/num)
+		
+		return avg_quality_le_149,avg_quality_gt_149
+		
+	elif(len(dic_le_249_bucket) > 0 and len(dic_gt_249_bucket) > 0):
+		for k,v in dic_le_249_bucket.items():
+			sum += v
+			num += 1
+			avg_quality_le_249 = (sum/num)
 			
-		return avg_quality
+		for k,v in dic_gt_249_bucket.items():
+			sum += v
+			num += 1
+			avg_quality_gt_249 = (sum/num)
+			
+		return avg_quality_le_249,avg_quality_gt_249
+		
+	elif(len(dic_le_299_bucket) > 0 and len(dic_gt_299_bucket) > 0):
+		for k,v in dic_le_299_bucket.items():
+			sum += v
+			num += 1
+			avg_quality_le_299 = (sum/num)
+			
+		for k,v in dic_gt_299_bucket.items():
+			sum += v
+			num += 1
+			avg_quality_gt_299 = (sum/num)
+			
+		return avg_quality_le_299,avg_quality_gt_299
 	
 
 	
@@ -250,10 +398,13 @@ def print_150bp():
 	print(*hwhisker_149, sep='\t')
 	print(*R_le_149, sep='\t')
 	print(*R_gt_149, sep='\t')
+	print(*total_no_reads_149, sep='\t')
 	print(*final_perc_R1_le_149, sep='\t')
 	print(*final_perc_R1_gt_149, sep='\t')
-	print(*final_avg_quality_149, sep='\t')
-	print(*final_avg_length_149, sep='\t')
+	print(*final_avg_quality_le_149, sep='\t')
+	print(*final_avg_quality_gt_149, sep='\t')
+	print(*final_avg_length_le_149, sep='\t')
+	print(*final_avg_length_gt_149, sep='\t')
 	print("\nRead Quality Stats:")
 	print(*qual_N_mean_149, sep='\t')
 	print(*qual_G_mean_149, sep='\t')
@@ -265,7 +416,6 @@ def print_150bp():
 	print(*qual_Q3_149, sep='\t')
 	print(*qual_lwhisker_149, sep='\t')
 	print(*qual_hwhisker_149, sep='\t')
-	print(*total_no_reads_149, sep='\t')
 	print(*qual_lt_30_149, sep='\t')
 	print(*perc_qual_lt_30_149, sep='\t')
 	print(*ambi_calls_149, sep='\t')
@@ -286,10 +436,13 @@ def print_250bp():
 	print(*hwhisker_249, sep='\t')
 	print(*R_le_249, sep='\t')
 	print(*R_gt_249, sep='\t')
+	print(*total_no_reads_249, sep='\t')
 	print(*final_perc_R1_le_249, sep='\t')
 	print(*final_perc_R1_gt_249, sep='\t')
-	print(*final_avg_quality_249, sep='\t')
-	print(*final_avg_length_249, sep='\t')
+	print(*final_avg_quality_le_249, sep='\t')
+	print(*final_avg_quality_gt_249, sep='\t')
+	print(*final_avg_length_le_249, sep='\t')
+	print(*final_avg_length_gt_249, sep='\t')
 	print("\nRead Quality Stats:")
 	print(*qual_N_mean_249, sep='\t')
 	print(*qual_G_mean_249, sep='\t')
@@ -301,7 +454,6 @@ def print_250bp():
 	print(*qual_Q3_249, sep='\t')
 	print(*qual_lwhisker_249, sep='\t')
 	print(*qual_hwhisker_249, sep='\t')
-	print(*total_no_reads_249, sep='\t')
 	print(*qual_lt_30_249, sep='\t')
 	print(*perc_qual_lt_30_249, sep='\t')
 	print(*ambi_calls_249, sep='\t')
@@ -323,10 +475,13 @@ def print_300bp():
 	print(*hwhisker_299, sep='\t')
 	print(*R_le_299, sep='\t')
 	print(*R_gt_299, sep='\t')
+	print(*total_no_reads_299, sep='\t')
 	print(*final_perc_R1_le_299, sep='\t')
 	print(*final_perc_R1_gt_299, sep='\t')
-	print(*final_avg_quality_299, sep='\t')
-	print(*final_avg_length_299, sep='\t')
+	print(*final_avg_quality_le_299, sep='\t')
+	print(*final_avg_quality_gt_299, sep='\t')
+	print(*final_avg_length_le_299, sep='\t')
+	print(*final_avg_length_gt_299, sep='\t')
 	print("\nRead Quality Stats:")
 	print(*qual_N_mean_299, sep='\t')
 	print(*qual_G_mean_299, sep='\t')
@@ -338,7 +493,6 @@ def print_300bp():
 	print(*qual_Q3_299, sep='\t')
 	print(*qual_lwhisker_299, sep='\t')
 	print(*qual_hwhisker_299, sep='\t')
-	print(*total_no_reads_299, sep='\t')
 	print(*qual_lt_30_299, sep='\t')
 	print(*perc_qual_lt_30_299, sep='\t')
 	print(*ambi_calls_299, sep='\t')
@@ -347,144 +501,43 @@ def print_300bp():
 	
 # ---------------------------------------------------- MAIN ----------------------------------------------------------------- #	
 
-files_149 = [] #Stores paired read files
-files_249 = [] #Stores paired read files
-files_299 = [] #Stores paired read files
-# Following lists are to store all results for 149bp bucket
-N_mean_149 = ["Mean:"]
-SD_149 = ["Std Deviation:"]
-Variance_149 = ["Variance"]
-median_149 = ["Median"]
-Q1_149 = ["1st Quartile:"]
-Q3_149 = ["3rd Quartile:"]
-lwhisker_149 = ["Lower whisker:"]
-hwhisker_149 = ["Upper Whisker:"]
-Skew_149 = ["Skewness:"]
-G_mean_149 = ["Geometric Mean:"]
 
-qual_N_mean_149 = ["Mean:"]
-qual_SD_149 = ["Std Deviation:"]
-qual_Variance_149 = ["Variance:"]
-qual_median_149 = ["Median:"]
-qual_Q1_149 = ["1st Quartile:"]
-qual_Q3_149 = ["3rd Quartile:"]
-qual_lwhisker_149 = ["Lower whisker:"]
-qual_hwhisker_149 = ["Upper Whisker:"]
-qual_skew_149 = ["Skewness:"]
-qual_G_mean_149 = ["Geometric Mean:"]
-
-# Following lists are to store all results for 249bp bucket
-N_mean_249 = ["Mean:"]
-SD_249 = ["Std Deviation:"]
-Variance_249 = ["Variance"]
-median_249 = ["Median"]
-Q1_249 = ["1st Quartile:"]
-Q3_249 = ["3rd Quartile:"]
-lwhisker_249 = ["Lower whisker:"]
-hwhisker_249 = ["Upper Whisker:"]
-Skew_249 = ["Skewness:"]
-G_mean_249 = ["Geometric Mean:"]
-
-qual_N_mean_249 = ["Mean:"]
-qual_SD_249 = ["Std Deviation:"]
-qual_Variance_249 = ["Variance:"]
-qual_median_249 = ["Median:"]
-qual_Q1_249 = ["1st Quartile:"]
-qual_Q3_249 = ["3rd Quartile:"]
-qual_lwhisker_249 = ["Lower whisker:"]
-qual_hwhisker_249 = ["Upper Whisker:"]
-qual_skew_249 = ["Skewness:"]
-qual_G_mean_249 = ["Geometric Mean:"]
-
-# Following lists are to store all results for 299bp bucket
-N_mean_299 = ["Mean:"]
-SD_299 = ["Std Deviation:"]
-Variance_299 = ["Variance"]
-median_299 = ["Median"]
-Q1_299 = ["1st Quartile:"]
-Q3_299 = ["3rd Quartile:"]
-lwhisker_299 = ["Lower whisker:"]
-hwhisker_299 = ["Upper Whisker:"]
-Skew_299 = ["Skewness:"]
-G_mean_299 = ["Geometric Mean:"]
-
-qual_N_mean_299 = ["Mean:"]
-qual_SD_299 = ["Std Deviation:"]
-qual_Variance_299 = ["Variance:"]
-qual_median_299 = ["Median:"]
-qual_Q1_299 = ["1st Quartile:"]
-qual_Q3_299 = ["3rd Quartile:"]
-qual_lwhisker_299 = ["Lower whisker:"]
-qual_hwhisker_299 = ["Upper Whisker:"]
-qual_skew_299 = ["Skewness:"]
-qual_G_mean_299 = ["Geometric Mean:"]
-
-total_no_reads_149 = ["Read count:"]
-total_no_reads_249 = ["Read count:"]
-total_no_reads_299 = ["Read count:"]
-qual_lt_30_149 = ["Reads < Q30:"]
-qual_lt_30_249 = ["Reads < Q30:"]
-qual_lt_30_299 = ["Reads < Q30:"]
-perc_qual_lt_30_149 = ["Percentage reads < Q30"]
-perc_qual_lt_30_249 = ["Percentage reads < Q30"]
-perc_qual_lt_30_299 = ["Percentage reads < Q30"]
-ambi_calls_149 = ["Amibguous base calls:"]
-ambi_calls_249 = ["Amibguous base calls:"]
-ambi_calls_299 = ["Amibguous base calls:"]
-
-
-R_le_149 = ["Reads <= 149:"]
-R_gt_149 = ["Reads > 149:"]
-R_le_249 = ["Reads <= 249:"]
-R_gt_249 = ["Reads > 249:"]
-R_le_299 = ["Reads <= 299:"]
-R_gt_299 = ["Reads > 299:"]
-
-r_median = 0
-i_median = 0
-
-final_perc_R1_le_149 = ["% Reads <= 149:"]
-final_perc_R1_gt_149 = ["% Reads > 149:"]
-
-
-final_perc_R1_le_249 = ["% Reads <= 249:"]
-final_perc_R1_gt_249 = ["% Reads > 249:"]
-
-
-final_perc_R1_le_299 = ["% Reads <= 299:"]
-final_perc_R1_gt_299 = ["% Reads > 299:"]
-
-
-final_avg_quality_149 = ["Avergage Quality:"]
-final_avg_length_149 = ["Average Length"]
-final_avg_quality_249 = ["Avergage Quality:"]
-final_avg_length_249 = ["Average Length"]
-final_avg_quality_299 = ["Avergage Quality:"]
-final_avg_length_299 = ["Average Length"]
-
-
-
-
-# getting all fastq files
-temp1 = []
-
-for name in glob.glob('./*_1.fastq'):
-    file1.append(name)
-
-for name in glob.glob('./*_2.fastq'):
-    file2.append(name)
+for x in os.listdir('.'):
+  if re.match('.*_R1.*.fastq|.*_1.fastq', x):
+    file1.append(x)
 	
+for x in os.listdir('.'):
+  if re.match('.*_R2.*.fastq|.*_2.fastq', x):
+    file2.append(x)
+	
+# sorting lists for pairs to be in the same order
 file1 = sorted(file1)
 file2 = sorted(file2)
 
 for f1,f2 in zip(file1,file2):
-	#print(f1,f2)
-	
-	#files.extend((f1,f2))
-	
 
+	# command line arguments
+	fastq1 = f1
+	fastq2 = f2
+
+	# Parsing fastq: function call
+	seqs1,quals1 = parseFastq(fastq1)	# takes in fastq file as an input from command line and passes it as an argument to parseFastq function. Returns sequences and qualities and stores in seqs & quals
+	seqs2,quals2 = parseFastq(fastq2)
+		
+	# total number of reads
+	read_count1 = len(seqs1)
+	read_count2 = len(seqs2)
+	
+	# average quality scores for each read: function call
+	read1_length,quality_scores_R1 = qual_score(quals1)
+	read2_length,quality_scores_R2 = qual_score(quals2)
+	
+	# Descriptive stats for read1 length: function call (getting the median for both R1 and R2)
+	mean1,stdDev1,var1,Q1_1,r_median,Q3_1,skew1,gmean1,lwhisker1,hwhisker1 = stats(read1_length)
+	mean2,stdDev2,var2,Q1_2,i_median,Q3_2,skew2,gmean2,lwhisker2,hwhisker2 = stats(read2_length)
+	
 	# Result lists
-	if(r_median < 152 and i_median < 152):
+	if(hwhisker1 < 153 and hwhisker2 < 153):
 		files_149.extend((f1,f2))
 		
 		# command line arguments
@@ -499,7 +552,7 @@ for f1,f2 in zip(file1,file2):
 		read_count1 = len(seqs1)
 		read_count2 = len(seqs2)
 		
-		total_no_reads_149.extend((read_count1,read_count2))
+		total_no_reads_149.extend((read_count1,read_count2)) # read count
 
 
 		# average quality scores for each read: function call
@@ -516,6 +569,7 @@ for f1,f2 in zip(file1,file2):
 		percent_reads_lt_30_R2 = Q2_lt_30/len(seqs2) * 100
 		perc_qual_lt_30_149.extend((percent_reads_lt_30_R1,percent_reads_lt_30_R2))
 
+		
 		# Ambiguous base function call: function call
 		countN1 = countN(seqs1)
 		countN2 = countN(seqs2)
@@ -553,17 +607,18 @@ for f1,f2 in zip(file1,file2):
 		qual_G_mean_149.extend((q_gmean,s_gmean))
 		
 		
-		
-
 		# read Length thresholds: function call
-		R1_le_149,R1_gt_149,R1_le_249,R1_gt_249,R1_le_299,R1_gt_299,tot_len1_le_149,tot_len1_gt_149,tot_len1_le_249,tot_len1_gt_249,tot_len1_le_299,tot_len1_gt_299 = threshold(read1_length)
-		R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299,tot_len2_le_149,tot_len2_gt_149,tot_len2_le_249,tot_len2_gt_249,tot_len2_le_299,tot_len2_gt_299 = threshold(read2_length)
+		R1_le_149,R1_le_249,R1_le_299,tot_len1_le_149,tot_len1_le_249,tot_len1_le_299,tot_len1_gt_149,tot_len1_gt_249,tot_len1_gt_299 = threshold(read1_length)
+		R2_le_149,R2_le_249,R2_le_299,tot_len2_le_149,tot_len2_le_249,tot_len2_le_299,tot_len2_gt_149,tot_len2_gt_249,tot_len2_gt_299 = threshold(read2_length)
 		
+		# reads greater than 149
+		R1_gt_149 = read_count1-R1_le_149
+		R2_gt_149 = read_count1-R1_le_149
 		
 		R_le_149.extend((R1_le_149,R2_le_149))
 		R_gt_149.extend((R1_gt_149,R2_gt_149))
 		
-		
+		# Calculating percent reads above and below 149
 		perc_R1_le_149 = (R1_le_149/read_count1) * 100
 		perc_R1_gt_149 = (R1_gt_149/read_count1) * 100
 		perc_R2_le_149 = (R2_le_149/read_count2) * 100
@@ -574,19 +629,24 @@ for f1,f2 in zip(file1,file2):
 		
 	
 		# avg_qual_score: function call
-		avg_quality_1 = avg_qual_score(read1_length,quality_scores_R1)
-		avg_quality_2 = avg_qual_score(read2_length,quality_scores_R2)
+		avg_quality_1_le_149,avg_quality_1_gt_149 = avg_qual_score(read1_length,quality_scores_R1)
+		avg_quality_2_le_149,avg_quality_2_gt_149 = avg_qual_score(read2_length,quality_scores_R2)
 		
-		final_avg_quality_149.extend((avg_quality_1,avg_quality_2))
+		final_avg_quality_le_149.extend((avg_quality_1_le_149,avg_quality_2_le_149))
+		final_avg_quality_gt_149.extend((avg_quality_1_gt_149,avg_quality_2_gt_149))
 		
-		avg_length_1 = (tot_len1_le_149 + tot_len1_gt_149) / (R1_le_149 + R1_gt_149)
-		avg_length_2 = (tot_len2_le_149 + tot_len2_gt_149) / (R2_le_149 + R2_gt_149)
+		# Calculating average length of reads above and below 149
+		avg_length_1_le_149 = tot_len1_le_149/R1_le_149 
+		avg_length_1_gt_149 = tot_len1_gt_149/R1_gt_149
+		avg_length_2_le_149 = tot_len2_le_149/R2_le_149
+		avg_length_2_gt_149 = tot_len2_gt_149/R2_gt_149
 		
-		final_avg_length_149.extend((avg_length_1,avg_length_2))
+		final_avg_length_le_149.extend((avg_length_1_le_149,avg_length_2_le_149))
+		final_avg_length_gt_149.extend((avg_length_1_gt_149,avg_length_2_gt_149))
 		
 		
 				
-	elif(r_median < 252 and i_median < 252 ):
+	elif(hwhisker1 < 253 and hwhisker2 < 253 ):
 		files_249.extend((f1,f2))
 		
 		
@@ -656,14 +716,15 @@ for f1,f2 in zip(file1,file2):
 		
 		
 		# read Length thresholds: function call
-		R1_le_149,R1_gt_149,R1_le_249,R1_gt_249,R1_le_299,R1_gt_299,tot_len1_le_149,tot_len1_gt_149,tot_len1_le_249,tot_len1_gt_249,tot_len1_le_299,tot_len1_gt_299 = threshold(read1_length)
-		R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299,tot_len2_le_149,tot_len2_gt_149,tot_len2_le_249,tot_len2_gt_249,tot_len2_le_299,tot_len2_gt_299 = threshold(read2_length)
-	
+		R1_le_149,R1_le_249,R1_le_299,tot_len1_le_149,tot_len1_le_249,tot_len1_le_299,tot_len1_gt_149,tot_len1_gt_249,tot_len1_gt_299 = threshold(read1_length)
+		R2_le_149,R2_le_249,R2_le_299,tot_len2_le_149,tot_len2_le_249,tot_len2_le_299,tot_len2_gt_149,tot_len2_gt_249,tot_len2_gt_299 = threshold(read2_length)
+		
+		R1_gt_249 = read_count1-R1_le_249
+		R2_gt_249 = read_count1-R1_le_249
+		
 		
 		R_le_249.extend((R1_le_249,R2_le_249))
 		R_gt_249.extend((R1_gt_249,R2_gt_249))
-		
-		
 		
 		
 		perc_R1_le_249 = (R1_le_249/read_count1) * 100
@@ -674,17 +735,21 @@ for f1,f2 in zip(file1,file2):
 		final_perc_R1_le_249.extend((perc_R1_le_249,perc_R2_le_249))
 		final_perc_R1_gt_249.extend((perc_R1_gt_249,perc_R2_gt_249))
 
-		
+	
 		# avg_qual_score: function call
-		avg_quality_1 = avg_qual_score(read1_length,quality_scores_R1)
-		avg_quality_2 = avg_qual_score(read2_length,quality_scores_R2)
+		avg_quality_1_le_249,avg_quality_1_gt_249 = avg_qual_score(read1_length,quality_scores_R1)
+		avg_quality_2_le_249,avg_quality_2_gt_249 = avg_qual_score(read2_length,quality_scores_R2)
 		
-		final_avg_quality_249.extend((avg_quality_1,avg_quality_2))
+		final_avg_quality_le_249.extend((avg_quality_1_le_249,avg_quality_2_le_249))
+		final_avg_quality_gt_249.extend((avg_quality_1_gt_249,avg_quality_2_gt_249))
 
-		avg_length_1 = (tot_len1_le_249 + tot_len1_gt_249) / (R1_le_249 + R1_gt_249)
-		avg_length_2 = (tot_len2_le_249 + tot_len2_gt_249) / (R2_le_249 + R2_gt_249)
+		avg_length_1_le_249 = tot_len1_le_249 / R1_le_249
+		avg_length_1_gt_249 = tot_len1_gt_249 / R1_gt_249
+		avg_length_2_le_249 = tot_len2_le_249 / R2_le_249 
+		avg_length_2_gt_249 = tot_len2_gt_249 / R2_gt_249
 		
-		final_avg_length_249.extend((avg_length_1,avg_length_2))
+		final_avg_length_le_249.extend((avg_length_1_le_249,avg_length_2_le_249))
+		final_avg_length_gt_249.extend((avg_length_1_gt_249,avg_length_2_gt_249))
 	
 		
 		
@@ -760,9 +825,11 @@ for f1,f2 in zip(file1,file2):
 		
 		
 		# read Length thresholds: function call
-		R1_le_149,R1_gt_149,R1_le_249,R1_gt_249,R1_le_299,R1_gt_299,tot_len1_le_149,tot_len1_gt_149,tot_len1_le_249,tot_len1_gt_249,tot_len1_le_299,tot_len1_gt_299 = threshold(read1_length)
-		R2_le_149,R2_gt_149,R2_le_249,R2_gt_249,R2_le_299,R2_gt_299,tot_len2_le_149,tot_len2_gt_149,tot_len2_le_249,tot_len2_gt_249,tot_len2_le_299,tot_len2_gt_299 = threshold(read2_length)
+		R1_le_149,R1_le_249,R1_le_299,tot_len1_le_149,tot_len1_le_249,tot_len1_le_299,tot_len1_gt_149,tot_len1_gt_249,tot_len1_gt_299 = threshold(read1_length)
+		R2_le_149,R2_le_249,R2_le_299,tot_len2_le_149,tot_len2_le_249,tot_len2_le_299,tot_len2_gt_149,tot_len2_gt_249,tot_len2_gt_299 = threshold(read2_length)
 		
+		R1_gt_299 = read_count1-R1_le_299
+		R2_gt_299 = read_count1-R1_le_299
 		
 		R_le_299.extend((R1_le_299,R2_le_299))
 		R_gt_299.extend((R1_gt_299,R2_gt_299))
@@ -779,19 +846,23 @@ for f1,f2 in zip(file1,file2):
 		#header.append("\n\n-----Stats for 299 bucket---------")
 		
 		# avg_qual_score: function call
-		avg_quality_1 = avg_qual_score(read1_length,quality_scores_R1)
-		avg_quality_2 = avg_qual_score(read2_length,quality_scores_R2)
+		avg_quality_1_le_299,avg_quality_1_gt_299 = avg_qual_score(read1_length,quality_scores_R1)
+		avg_quality_2_le_299,avg_quality_2_gt_299 = avg_qual_score(read2_length,quality_scores_R2)
 		
-		final_avg_quality_299.extend((avg_quality_1,avg_quality_2))
+		final_avg_quality_le_299.extend((avg_quality_1_le_299,avg_quality_2_le_299))
+		final_avg_quality_gt_299.extend((avg_quality_1_gt_299,avg_quality_2_gt_299))
 
-		avg_length_1 = (tot_len1_le_299 + tot_len1_gt_299) / (R1_le_299 + R1_gt_299)
-		avg_length_2 = (tot_len2_le_299 + tot_len2_gt_299) / (R2_le_299 + R2_gt_299)
+		avg_length_1_le_299 = tot_len1_le_299 / R1_le_299
+		avg_length_1_gt_299 = tot_len1_gt_299 / R1_gt_299
+		avg_length_2_le_299 = tot_len2_le_299 / R2_le_299
+		avg_length_2_gt_299 = tot_len2_gt_299 / R2_gt_299
 		
-		final_avg_length_299.extend((avg_length_1,avg_length_2))
+		final_avg_length_le_299.extend((avg_length_1_le_299,avg_length_2_le_299))
+		final_avg_length_gt_299.extend((avg_length_1_gt_299,avg_length_2_gt_299))
 
 		
 		
-		
+
 #function call
 print_150bp()
 print_250bp()
