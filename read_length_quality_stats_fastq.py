@@ -25,10 +25,6 @@ R1_lt_249 = 0
 R1_ge_249 = 0
 R2_lt_249 = 0
 R2_ge_249 = 0
-tot_len1_lt_249 = 0
-tot_len1_ge_249 = 0
-tot_len2_lt_249 = 0
-tot_len2_ge_249 = 0
 countN1 = 0
 countN2 = 0
 Q1_lt_30 = 0
@@ -46,11 +42,13 @@ dic_gt_299_bucket = {}
 file1 = []
 file2 = []
 tot_len1_ge_149 = 0
+tot_len1_lt_149 = 0
+tot_len2_lt_149 = 0
+tot_len2_ge_149 = 0
 tot_len1_lt_249 = 0
 tot_len1_ge_249 = 0
 tot_len1_lt_299 = 0
 tot_len1_ge_299 = 0
-tot_len2_ge_149 = 0
 tot_len2_lt_249 = 0
 tot_len2_ge_249 = 0
 tot_len2_lt_299 = 0
@@ -63,17 +61,29 @@ tot_qual1_lt_249 = 0
 tot_qual1_ge_249 = 0
 tot_qual2_lt_249 = 0
 tot_qual2_ge_249 = 0
-
 tot_qual1_lt_149 = 0
 tot_qual1_ge_149 = 0
 tot_qual2_lt_149 = 0
-tot_qual2_ge_149 = 0
-		
+tot_qual2_ge_149 = 0	
 tot_qual1_lt_299 = 0
 tot_qual1_ge_299 = 0
 tot_qual2_lt_299 = 0
 tot_qual2_ge_299 = 0
 
+R1_lt_149 = 0
+R1_ge_149 = 0
+R2_lt_149 = 0
+R2_ge_149 = 0
+
+R1_lt_249 = 0
+R1_ge_249 = 0
+R2_lt_249 = 0
+R2_ge_249 = 0
+
+R1_lt_299 = 0
+R1_ge_299 = 0
+R2_lt_299 = 0
+R2_ge_299 = 0
 
 files_149 = [] #Stores paired read files
 files_249 = [] #Stores paired read files
@@ -268,7 +278,7 @@ def countN(seq):
 def Q30(qual_list):
 	count_lt_30 = 0
 	for x in qual_list:
-		if(x <= 30.0):
+		if(x < 30):
 			count_lt_30 += 1
 		else:
 			continue
@@ -541,6 +551,7 @@ for f1,f2 in zip(file1,file2):
 		perc_R1_ge_149 = (R1_ge_149/read_count1) * 100
 		perc_R2_lt_149 = (R2_lt_149/read_count2) * 100
 		perc_R2_ge_149 = (R2_ge_149/read_count2) * 100
+		
 	
 		final_perc_R1_lt_149.extend((perc_R1_lt_149,perc_R2_lt_149))
 		final_perc_R1_ge_149.extend((perc_R1_ge_149,perc_R2_ge_149))
@@ -554,6 +565,7 @@ for f1,f2 in zip(file1,file2):
 		tot_qual1_ge_149 = 0
 		tot_qual2_lt_149 = 0
 		tot_qual2_ge_149 = 0
+		
 		
 		for l,q in zip(read1_length,quality_scores_R1):
 
@@ -841,6 +853,11 @@ for f1,f2 in zip(file1,file2):
 		tot_qual1_ge_299 = 0
 		tot_qual2_lt_299 = 0
 		tot_qual2_ge_299 = 0
+		tot_len1_lt_299 = 0
+		tot_len1_ge_299 = 0
+		tot_len2_lt_299 = 0
+		tot_len2_ge_299 = 0
+		
 		
 		for l,q in zip(read1_length,quality_scores_R1):
 
@@ -879,5 +896,3 @@ for f1,f2 in zip(file1,file2):
 print_150bp()
 print_250bp()
 print_300bp()
-
-
