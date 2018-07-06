@@ -136,7 +136,7 @@ qual_G_mean_249 = ["Geometric_Mean:"]
 
 # Following lists are to store all results for 299bp bucket
 N_mean_299 = ["Mean:"]
-SD_299 = ["Std Deviation:"]
+SD_299 = ["Std_Deviation:"]
 Variance_299 = ["Variance"]
 median_299 = ["Median"]
 Q1_299 = ["1st_Quartile:"]
@@ -160,49 +160,49 @@ qual_G_mean_299 = ["Geometric_Mean:"]
 total_no_reads_149 = ["Read_count:"]
 total_no_reads_249 = ["Read_count:"]
 total_no_reads_299 = ["Read_count:"]
-qual_lt_30_149 = ["Reads < Q30:"]
-qual_lt_30_249 = ["Reads < Q30:"]
-qual_lt_30_299 = ["Reads < Q30:"]
-perc_qual_lt_30_149 = ["Percentage_reads < Q30"]
-perc_qual_lt_30_249 = ["Percentage_reads < Q30"]
-perc_qual_lt_30_299 = ["Percentage_reads < Q30"]
+qual_lt_30_149 = ["Reads_<_Q30:"]
+qual_lt_30_249 = ["Reads_<_Q30:"]
+qual_lt_30_299 = ["Reads_<_Q30:"]
+perc_qual_lt_30_149 = ["Percentage_reads_<_Q30"]
+perc_qual_lt_30_249 = ["Percentage_reads_<_Q30"]
+perc_qual_lt_30_299 = ["Percentage_reads_<_Q30"]
 ambi_calls_149 = ["Ambiguous_base_calls:"]
 ambi_calls_249 = ["Ambiguous_base_calls:"]
 ambi_calls_299 = ["Ambiguous_base_calls:"]
 
 
-R_lt_149 = ["Reads < 149:"]
-R_ge_149 = ["Reads >= 149:"]
-R_lt_249 = ["Reads < 249:"]
-R_ge_249 = ["Reads >= 249:"]
-R_lt_299 = ["Reads < 299:"]
-R_ge_299 = ["Reads >= 299:"]
+R_lt_149 = ["Reads_<_149:"]
+R_ge_149 = ["Reads_>=_149:"]
+R_lt_249 = ["Reads_<_249:"]
+R_ge_249 = ["Reads_>=_249:"]
+R_lt_299 = ["Reads_<_299:"]
+R_ge_299 = ["Reads_>=_299:"]
 
 r_median = 0
 i_median = 0
 
-final_perc_R1_lt_149 = ["% Reads < 149:"]
-final_perc_R1_ge_149 = ["% Reads >= 149:"]
+final_perc_R1_lt_149 = ["% Reads_<_149:"]
+final_perc_R1_ge_149 = ["% Reads_>=_149:"]
 
-final_perc_R1_lt_249 = ["% Reads < 249:"]
-final_perc_R1_gt_249 = ["% Reads >= 249:"]
+final_perc_R1_lt_249 = ["% Reads_<_249:"]
+final_perc_R1_gt_249 = ["% Reads_>=_249:"]
 
-final_perc_R1_lt_299 = ["% Reads < 299:"]
-final_perc_R1_gt_299 = ["% Reads >= 299:"]
+final_perc_R1_lt_299 = ["% Reads_<_299:"]
+final_perc_R1_gt_299 = ["% Reads_>=_299:"]
 
 
-final_avg_quality_lt_149 = ["Average_Quality < 149:"]
-final_avg_quality_ge_149 = ["Average_Quality >= 149:"]
-final_avg_length_lt_149 = ["Average_Length < 149"]
-final_avg_length_ge_149 = ["Average_Length >= 149"]
-final_avg_quality_lt_249 = ["Average_Quality < 249:"]
-final_avg_quality_ge_249 = ["Average_Quality >= 249:"]
-final_avg_length_lt_249 = ["Average_Length < 249"]
-final_avg_length_ge_249 = ["Average_Length >= 249"]
-final_avg_quality_lt_299 = ["Average_Quality < 299:"]
-final_avg_quality_ge_299 = ["Average_Quality >= 299:"]
-final_avg_length_lt_299 = ["Average_Length < 299"]
-final_avg_length_ge_299 = ["Average_Length >= 299"]
+final_avg_quality_lt_149 = ["Average_Quality_<_149:"]
+final_avg_quality_ge_149 = ["Average_Quality_>=_149:"]
+final_avg_length_lt_149 = ["Average_Length_<_149"]
+final_avg_length_ge_149 = ["Average_Length_>=_149"]
+final_avg_quality_lt_249 = ["Average_Quality_<_249:"]
+final_avg_quality_ge_249 = ["Average_Quality_>=_249:"]
+final_avg_length_lt_249 = ["Average_Length_<_249"]
+final_avg_length_ge_249 = ["Average_Length_>=_249"]
+final_avg_quality_lt_299 = ["Average_Quality_<_299:"]
+final_avg_quality_ge_299 = ["Average_Quality_>=_299:"]
+final_avg_length_lt_299 = ["Average_Length_<_299"]
+final_avg_length_ge_299 = ["Average_Length_>=_299"]
 
 
 
@@ -278,7 +278,8 @@ def countN(seq):
 def Q30(qual_list):
 	count_lt_30 = 0
 	for x in qual_list:
-		if(x < 30):
+		if(x >= 0 and x < 30):
+			#print(x,"<","30")	# Sanity check!
 			count_lt_30 += 1
 		else:
 			continue
@@ -300,7 +301,7 @@ def qual_score(qual):
 	
 	
 def print_150bp():	
-	print("\n\n-----Stats for 149 bucket---------")
+	print("\n\n-----Stats_for_149_bucket---------")
 	print(*files_149, sep='\t')
 	print("Read Length Stats:")
 	print(*lwhisker_149, sep='\t')
@@ -338,7 +339,7 @@ def print_150bp():
 	print(*ambi_calls_149, sep='\t')
 	
 def print_250bp():	
-	print("\n\n-----Stats for 249 bucket---------")
+	print("\n\n-----Stats_for_249_bucket---------")
 	print(*files_249, sep='\t')
 	print("Read Length Stats:")
 	print(*lwhisker_249, sep='\t')
@@ -377,7 +378,7 @@ def print_250bp():
 
 	
 def print_300bp():	
-	print("\n\n-----Stats for 299 bucket---------")
+	print("\n\n-----Stats_for_299_bucket---------")
 	print(*files_299, sep='\t')
 	print("Read Length Stats:")
 	print(*lwhisker_299, sep='\t')
@@ -841,22 +842,15 @@ for f1,f2 in zip(file1,file2):
 		
 		#header.append("\n\n-----Stats for 299 bucket---------")
 		
-		sum1 = 0
-		num1 = 0
 		avg_quality_1_le_299 = 0
 		avg_quality_1_gt_299 = 0
-		sum2 = 0
-		num2 = 0
 		avg_quality_2_le_299 = 0
 		avg_quality_2_gt_299 = 0
 		tot_qual1_lt_299 = 0
 		tot_qual1_ge_299 = 0
 		tot_qual2_lt_299 = 0
 		tot_qual2_ge_299 = 0
-		tot_len1_lt_299 = 0
-		tot_len1_ge_299 = 0
-		tot_len2_lt_299 = 0
-		tot_len2_ge_299 = 0
+		
 		
 		
 		for l,q in zip(read1_length,quality_scores_R1):
