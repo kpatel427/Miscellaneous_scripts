@@ -2,7 +2,7 @@
 # Authors: Khushbu Patel and Lori Gladney 3-16-18
 # Lyve-SET diagnosis/QC script
 # Edited, Lee Katz 2018-05-08
-# Usage: ./hqSNP_diagnose.pl projectdir ref.fasta
+# Usage: ./hqSNP_diagnose.pl projectdir /path/to/reference/ref.fasta
 
 use warnings;
 use strict;
@@ -41,7 +41,7 @@ sub main{
   my $bam_path           = "$project/bam";
   my $out_aln_path       = "$project/msa/out.aln.fasta";
   my $out_info_path      = "$project/msa/out.informative.fasta";
-  my $reference          = "./reference/$ARGV[1]";
+  my $reference          = "$ARGV[1]";
   my $out_pool_vcf		 = "$project/msa/out.pooled.vcf.gz";
   
 
