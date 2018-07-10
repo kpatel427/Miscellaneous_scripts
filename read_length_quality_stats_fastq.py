@@ -421,11 +421,11 @@ def print_300bp():
 
 
 for x in os.listdir('.'):
-  if re.match('.*_R1.*.fastq|.*_1.fastq', x):
+  if re.match('.*_R1.*.fastq$|.*_1.fastq$', x):
     file1.append(x)
 	
 for x in os.listdir('.'):
-  if re.match('.*_R2.*.fastq|.*_2.fastq', x):
+  if re.match('.*_R2.*.*fastq$|.*_2.fastq$', x):
     file2.append(x)
 	
 # sorting lists for pairs to be in the same order
@@ -433,7 +433,8 @@ file1 = sorted(file1)
 file2 = sorted(file2)
 
 for f1,f2 in zip(file1,file2):
-
+	
+	
 	# command line arguments
 	fastq1 = f1
 	fastq2 = f2
