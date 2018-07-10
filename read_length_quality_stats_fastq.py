@@ -303,7 +303,7 @@ def qual_score(qual):
 	
 def print_150bp():	
 	print("\n\n-----Stats_for_149_bucket---------")
-	print(*files_149, sep='\t')
+	print('\t',*files_149, sep='\t')
 	print("Read_Length_Stats:")
 	print(*lwhisker_149, sep='\t')
 	print(*Q1_149, sep='\t')
@@ -341,7 +341,7 @@ def print_150bp():
 	
 def print_250bp():	
 	print("\n\n-----Stats_for_249_bucket---------")
-	print(*files_249, sep='\t')
+	print('\t',*files_249, sep='\t')
 	print("Read_Length_Stats:")
 	print(*lwhisker_249, sep='\t')
 	print(*Q1_249, sep='\t')
@@ -380,7 +380,7 @@ def print_250bp():
 	
 def print_300bp():	
 	print("\n\n-----Stats_for_299_bucket---------")
-	print(*files_299, sep='\t')
+	print('\t',*files_299, sep='\t')
 	print("Read_Length_Stats:")
 	print(*lwhisker_299, sep='\t')
 	print(*Q1_299, sep='\t')
