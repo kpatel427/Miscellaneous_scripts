@@ -88,9 +88,10 @@ R2_ge_299 = 0
 files_149 = [] #Stores paired read files
 files_249 = [] #Stores paired read files
 files_299 = [] #Stores paired read files
+
 # Following lists are to store all results for 149bp bucket
 N_mean_149 = ["Mean:"]
-SD_149 = ["Std Deviation:"]
+SD_149 = ["Std_Deviation:"]
 Variance_149 = ["Variance"]
 median_149 = ["Median"]
 Q1_149 = ["1st_Quartile:"]
@@ -181,14 +182,14 @@ R_ge_299 = ["Reads_>=_299:"]
 r_median = 0
 i_median = 0
 
-final_perc_R1_lt_149 = ["% Reads_<_149:"]
-final_perc_R1_ge_149 = ["% Reads_>=_149:"]
+final_perc_R1_lt_149 = ["%_Reads_<_149:"]
+final_perc_R1_ge_149 = ["%_Reads_>=_149:"]
 
-final_perc_R1_lt_249 = ["% Reads_<_249:"]
-final_perc_R1_gt_249 = ["% Reads_>=_249:"]
+final_perc_R1_lt_249 = ["%_Reads_<_249:"]
+final_perc_R1_gt_249 = ["%_Reads_>=_249:"]
 
-final_perc_R1_lt_299 = ["% Reads_<_299:"]
-final_perc_R1_gt_299 = ["% Reads_>=_299:"]
+final_perc_R1_lt_299 = ["%_Reads_<_299:"]
+final_perc_R1_gt_299 = ["%_Reads_>=_299:"]
 
 
 final_avg_quality_lt_149 = ["Average_Quality_<_149:"]
@@ -303,7 +304,7 @@ def qual_score(qual):
 def print_150bp():	
 	print("\n\n-----Stats_for_149_bucket---------")
 	print(*files_149, sep='\t')
-	print("Read Length Stats:")
+	print("Read_Length_Stats:")
 	print(*lwhisker_149, sep='\t')
 	print(*Q1_149, sep='\t')
 	print(*median_149, sep='\t')
@@ -323,7 +324,7 @@ def print_150bp():
 	print(*final_avg_quality_ge_149, sep='\t')
 	print(*final_avg_length_lt_149, sep='\t')
 	print(*final_avg_length_ge_149, sep='\t')
-	print("\nRead Quality Stats:")
+	print("\nRead_Quality_Stats:")
 	print(*qual_lwhisker_149, sep='\t')
 	print(*qual_Q1_149, sep='\t')
 	print(*qual_median_149, sep='\t')
@@ -341,7 +342,7 @@ def print_150bp():
 def print_250bp():	
 	print("\n\n-----Stats_for_249_bucket---------")
 	print(*files_249, sep='\t')
-	print("Read Length Stats:")
+	print("Read_Length_Stats:")
 	print(*lwhisker_249, sep='\t')
 	print(*Q1_249, sep='\t')
 	print(*median_249, sep='\t')
@@ -361,7 +362,7 @@ def print_250bp():
 	print(*final_avg_quality_ge_249, sep='\t')
 	print(*final_avg_length_lt_249, sep='\t')
 	print(*final_avg_length_ge_249, sep='\t')
-	print("\nRead Quality Stats:")
+	print("\nRead_Quality_Stats:")
 	print(*qual_lwhisker_249, sep='\t')
 	print(*qual_Q1_249, sep='\t')
 	print(*qual_median_249, sep='\t')
@@ -380,7 +381,7 @@ def print_250bp():
 def print_300bp():	
 	print("\n\n-----Stats_for_299_bucket---------")
 	print(*files_299, sep='\t')
-	print("Read Length Stats:")
+	print("Read_Length_Stats:")
 	print(*lwhisker_299, sep='\t')
 	print(*Q1_299, sep='\t')
 	print(*median_299, sep='\t')
@@ -400,7 +401,7 @@ def print_300bp():
 	print(*final_avg_quality_ge_299, sep='\t')
 	print(*final_avg_length_lt_299, sep='\t')
 	print(*final_avg_length_ge_299, sep='\t')
-	print("\nRead Quality Stats:")
+	print("\nRead_Quality_Stats:")
 	print(*qual_lwhisker_299, sep='\t')
 	print(*qual_Q1_299, sep='\t')
 	print(*qual_median_299, sep='\t')
