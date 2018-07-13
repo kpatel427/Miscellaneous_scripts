@@ -70,21 +70,6 @@ tot_qual1_ge_299 = 0
 tot_qual2_lt_299 = 0
 tot_qual2_ge_299 = 0
 
-R1_lt_149 = 0
-R1_ge_149 = 0
-R2_lt_149 = 0
-R2_ge_149 = 0
-
-R1_lt_249 = 0
-R1_ge_249 = 0
-R2_lt_249 = 0
-R2_ge_249 = 0
-
-R1_lt_299 = 0
-R1_ge_299 = 0
-R2_lt_299 = 0
-R2_ge_299 = 0
-
 files_149 = [] #Stores paired read files
 files_249 = [] #Stores paired read files
 files_299 = [] #Stores paired read files
@@ -239,21 +224,21 @@ def phred33toQ(qual):
 def stats(in_array):
 	a = np.array(in_array)
 	mean = a.mean()
-	mean = round(mean,5)	# rounding off upto 5 decimal places
+	mean = round(mean)	# rounding off
 	std_dev = a.std()
-	std_dev = round(std_dev,5)	# rounding off upto 5 decimal places
+	std_dev = round(std_dev)	# rounding off
 	variance = np.var(a)
-	variance = round(variance,5)	# rounding off upto 5 decimal places
+	variance = round(variance)	# rounding off
 	Q1 = np.percentile(a,25)
-	Q1 = round(Q1,5)	# rounding off upto 5 decimal places
+	Q1 = round(Q1)	# rounding off
 	median = np.percentile(a,50)
-	median = round(median,5)	# rounding off upto 5 decimal places
+	median = round(median)	# rounding off
 	Q3 = np.percentile(a,75)
-	Q3 = round(Q3,5)	# rounding off upto 5 decimal places
+	Q3 = round(Q3)	# rounding off
 	skewness = skew(a)
-	skewness = round(skewness,5)	# rounding off upto 5 decimal places
+	skewness = round(skewness)	# rounding off
 	geometric_mean = mstats.gmean(a)
-	geometric_mean = round(geometric_mean,5)	# rounding off upto 5 decimal places
+	geometric_mean = round(geometric_mean)	# rounding off
 	
 	high = []
 	low = []
@@ -271,8 +256,8 @@ def stats(in_array):
 	else:
 		high_whisker = max(in_array)
 	
-	low_whisker = round(low_whisker,5)
-	high_whisker = round(high_whisker,5)
+	low_whisker = round(low_whisker)	# rounding off
+	high_whisker = round(high_whisker)	# rounding off
 	
 	return mean,std_dev,variance,Q1,median,Q3,skewness,geometric_mean,low_whisker,high_whisker
 	
@@ -314,7 +299,7 @@ def qual_score(qual):
 	
 def print_150bp():	
 	print("\n\n-----Stats_for_149_bucket---------")
-	print('\t',*files_149, sep='\t')
+	print('\t','\t'.join(files_149))
 	print("Read_Length_Stats:")
 	print(*lwhisker_149, sep='\t')
 	print(*Q1_149, sep='\t')
@@ -352,7 +337,7 @@ def print_150bp():
 	
 def print_250bp():	
 	print("\n\n-----Stats_for_249_bucket---------")
-	print('\t',*files_249, sep='\t')
+	print('\t','\t'.join(files_249))
 	print("Read_Length_Stats:")
 	print(*lwhisker_249, sep='\t')
 	print(*Q1_249, sep='\t')
@@ -391,7 +376,7 @@ def print_250bp():
 	
 def print_300bp():	
 	print("\n\n-----Stats_for_299_bucket---------")
-	print('\t',*files_299, sep='\t')
+	print('\t','\t'.join(files_299))
 	print("Read_Length_Stats:")
 	print(*lwhisker_299, sep='\t')
 	print(*Q1_299, sep='\t')
@@ -492,6 +477,11 @@ for f1,f2 in zip(file1,file2):
 		read1_length,quality_scores_R1 = qual_score(quals1)
 		read2_length,quality_scores_R2 = qual_score(quals2)
 		
+		R1_lt_149 = 0
+		R1_ge_149 = 0
+		R2_lt_149 = 0
+		R2_ge_149 = 0
+		
 		for x in read1_length:
 			if(x < 149):
 				R1_lt_149 += 1
@@ -520,9 +510,9 @@ for f1,f2 in zip(file1,file2):
 		percent_reads_lt_30_R1 = Q1_lt_30/read_count1 * 100
 		percent_reads_lt_30_R2 = Q2_lt_30/read_count2 * 100
 		
-		# rounding off upto 5 decimal places
-		percent_reads_lt_30_R1 = round(percent_reads_lt_30_R1,5)
-		percent_reads_lt_30_R2 = round(percent_reads_lt_30_R2,5)
+		# rounding off 
+		percent_reads_lt_30_R1 = round(percent_reads_lt_30_R1)
+		percent_reads_lt_30_R2 = round(percent_reads_lt_30_R2)
 	
 		perc_qual_lt_30_149.extend((percent_reads_lt_30_R1,percent_reads_lt_30_R2))
 
@@ -570,13 +560,13 @@ for f1,f2 in zip(file1,file2):
 		perc_R2_lt_149 = (R2_lt_149/read_count2) * 100
 		perc_R2_ge_149 = (R2_ge_149/read_count2) * 100
 		
-		# rounding off upto 5 decimal places
-		perc_R1_lt_149 = round(perc_R1_lt_149,5)
-		perc_R1_ge_149 = round(perc_R1_ge_149,5)
-		perc_R2_lt_149 = round(perc_R2_lt_149,5)
-		perc_R2_ge_149 = round(perc_R2_ge_149,5)
+		# rounding off
+		perc_R1_lt_149 = round(perc_R1_lt_149)
+		perc_R1_ge_149 = round(perc_R1_ge_149)
+		perc_R2_lt_149 = round(perc_R2_lt_149)
+		perc_R2_ge_149 = round(perc_R2_ge_149)
 		
-	
+		
 		final_perc_R1_lt_149.extend((perc_R1_lt_149,perc_R2_lt_149))
 		final_perc_R1_ge_149.extend((perc_R1_ge_149,perc_R2_ge_149))
 		
@@ -610,11 +600,11 @@ for f1,f2 in zip(file1,file2):
 		avg_quality_2_le_149 = tot_qual2_lt_149 / R2_lt_149
 		avg_quality_2_gt_149 = tot_qual2_ge_149 / R2_ge_149
 				
-		# rounding off upto 5 decimal places
-		avg_quality_1_le_149 = round(avg_quality_1_le_149,5)
-		avg_quality_1_gt_149 = round(avg_quality_1_gt_149,5)
-		avg_quality_2_le_149 = round(avg_quality_2_le_149,5)
-		avg_quality_2_gt_149 = round(avg_quality_2_gt_149,5)
+		# rounding off
+		avg_quality_1_le_149 = round(avg_quality_1_le_149)
+		avg_quality_1_gt_149 = round(avg_quality_1_gt_149)
+		avg_quality_2_le_149 = round(avg_quality_2_le_149)
+		avg_quality_2_gt_149 = round(avg_quality_2_gt_149)
 		
 		final_avg_quality_lt_149.extend((avg_quality_1_le_149,avg_quality_2_le_149))
 		final_avg_quality_ge_149.extend((avg_quality_1_gt_149,avg_quality_2_gt_149))
@@ -625,11 +615,11 @@ for f1,f2 in zip(file1,file2):
 		avg_length_2_le_149 = tot_len2_lt_149/R2_lt_149
 		avg_length_2_gt_149 = tot_len2_ge_149/R2_ge_149
 		
-		# rounding off upto 5 decimal places
-		avg_length_1_le_149 = round(avg_length_1_le_149,5)
-		avg_length_1_gt_149 = round(avg_length_1_gt_149,5)
-		avg_length_2_le_149 = round(avg_length_2_le_149,5)
-		avg_length_2_gt_149 = round(avg_length_2_gt_149,5)
+		# rounding off
+		avg_length_1_le_149 = round(avg_length_1_le_149)
+		avg_length_1_gt_149 = round(avg_length_1_gt_149)
+		avg_length_2_le_149 = round(avg_length_2_le_149)
+		avg_length_2_gt_149 = round(avg_length_2_gt_149)
 		
 		final_avg_length_lt_149.extend((avg_length_1_le_149,avg_length_2_le_149))
 		final_avg_length_ge_149.extend((avg_length_1_gt_149,avg_length_2_gt_149))
@@ -658,6 +648,10 @@ for f1,f2 in zip(file1,file2):
 		read1_length,quality_scores_R1 = qual_score(quals1)
 		read2_length,quality_scores_R2 = qual_score(quals2)
 		
+		R1_lt_249 = 0
+		R1_ge_249 = 0
+		R2_lt_249 = 0
+		R2_ge_249 = 0
 		
 		for x in read1_length:
 			if(x < 249):
@@ -690,9 +684,9 @@ for f1,f2 in zip(file1,file2):
 		percent_reads_lt_30_R1 = Q1_lt_30/read_count1 * 100
 		percent_reads_lt_30_R2 = Q2_lt_30/read_count2 * 100
 		
-		# rounding off upto 5 decimal places
-		percent_reads_lt_30_R1 = round(percent_reads_lt_30_R1,5)
-		percent_reads_lt_30_R2 = round(percent_reads_lt_30_R2,5)
+		# rounding off
+		percent_reads_lt_30_R1 = round(percent_reads_lt_30_R1)
+		percent_reads_lt_30_R2 = round(percent_reads_lt_30_R2)
 
 		perc_qual_lt_30_249.extend((percent_reads_lt_30_R1,percent_reads_lt_30_R2)) 
 
@@ -738,11 +732,11 @@ for f1,f2 in zip(file1,file2):
 		perc_R2_lt_249 = (R2_lt_249/read_count2) * 100
 		perc_R2_gt_249 = (R2_ge_249/read_count2) * 100
 		
-		# rounding off upto 5 decimal places
-		perc_R1_lt_249 = round(perc_R1_lt_249,5)
-		perc_R1_gt_249 = round(perc_R1_gt_249,5)
-		perc_R2_lt_249 = round(perc_R2_lt_249,5)
-		perc_R2_gt_249 = round(perc_R2_gt_249,5)
+		# rounding off
+		perc_R1_lt_249 = round(perc_R1_lt_249)
+		perc_R1_gt_249 = round(perc_R1_gt_249)
+		perc_R2_lt_249 = round(perc_R2_lt_249)
+		perc_R2_gt_249 = round(perc_R2_gt_249)
 		
 				
 		final_perc_R1_lt_249.extend((perc_R1_lt_249,perc_R2_lt_249))
@@ -771,11 +765,11 @@ for f1,f2 in zip(file1,file2):
 		avg_quality_2_le_249 = tot_qual2_lt_249 / R2_lt_249
 		avg_quality_2_gt_249 = tot_qual2_ge_249 / R2_ge_249
 		
-		# rounding off upto 5 decimal places
-		avg_quality_1_le_249 = round(avg_quality_1_le_249,5)
-		avg_quality_1_gt_249 = round(avg_quality_1_gt_249,5)
-		avg_quality_2_le_249 = round(avg_quality_2_le_249,5)
-		avg_quality_2_gt_249 = round(avg_quality_2_gt_249,5)
+		# rounding off
+		avg_quality_1_le_249 = round(avg_quality_1_le_249)
+		avg_quality_1_gt_249 = round(avg_quality_1_gt_249)
+		avg_quality_2_le_249 = round(avg_quality_2_le_249)
+		avg_quality_2_gt_249 = round(avg_quality_2_gt_249)
 	
 	
 		final_avg_quality_lt_249.extend((avg_quality_1_le_249,avg_quality_2_le_249))
@@ -786,11 +780,11 @@ for f1,f2 in zip(file1,file2):
 		avg_length_2_le_249 = tot_len2_lt_249 / R2_lt_249 
 		avg_length_2_gt_249 = tot_len2_ge_249 / R2_ge_249
 		
-		# rounding off upto 5 decimal places
-		avg_length_1_le_249 = round(avg_length_1_le_249,5)
-		avg_length_1_gt_249 = round(avg_length_1_gt_249,5)
-		avg_length_2_le_249 = round(avg_length_2_le_249,5)
-		avg_length_2_gt_249 = round(avg_length_2_gt_249,5)
+		# rounding off
+		avg_length_1_le_249 = round(avg_length_1_le_249)
+		avg_length_1_gt_249 = round(avg_length_1_gt_249)
+		avg_length_2_le_249 = round(avg_length_2_le_249)
+		avg_length_2_gt_249 = round(avg_length_2_gt_249)
 		
 	
 		final_avg_length_lt_249.extend((avg_length_1_le_249,avg_length_2_le_249))
@@ -820,6 +814,11 @@ for f1,f2 in zip(file1,file2):
 		# average quality scores for each read: function call
 		read1_length,quality_scores_R1 = qual_score(quals1)
 		read2_length,quality_scores_R2 = qual_score(quals2)
+		
+		R1_lt_299 = 0
+		R1_ge_299 = 0
+		R2_lt_299 = 0
+		R2_ge_299 = 0
 		
 		for x in read1_length:
 			if(x < 299):
@@ -851,9 +850,9 @@ for f1,f2 in zip(file1,file2):
 		percent_reads_lt_30_R1 = Q1_lt_30/len(seqs1) * 100
 		percent_reads_lt_30_R2 = Q2_lt_30/len(seqs2) * 100
 		
-		# rounding off upto 5 decimal places
-		percent_reads_lt_30_R1 = round(percent_reads_lt_30_R1,5)
-		percent_reads_lt_30_R2 = round(percent_reads_lt_30_R2,5)
+		# rounding off
+		percent_reads_lt_30_R1 = round(percent_reads_lt_30_R1)
+		percent_reads_lt_30_R2 = round(percent_reads_lt_30_R2)
 		
 		perc_qual_lt_30_299.extend((percent_reads_lt_30_R1,percent_reads_lt_30_R2))
 
@@ -899,11 +898,11 @@ for f1,f2 in zip(file1,file2):
 		perc_R2_lt_299 = (R2_lt_299/read_count2) * 100
 		perc_R2_gt_299 = (R2_ge_299/read_count2) * 100
 		
-		# rounding off upto 5 decimal places
-		perc_R1_lt_299 = round(perc_R1_lt_299,5)
-		perc_R1_gt_299 = round(perc_R1_gt_299,5)
-		perc_R2_lt_299 = round(perc_R2_lt_299,5)
-		perc_R2_gt_299 = round(perc_R2_gt_299,5)
+		# rounding off
+		perc_R1_lt_299 = round(perc_R1_lt_299)
+		perc_R1_gt_299 = round(perc_R1_gt_299)
+		perc_R2_lt_299 = round(perc_R2_lt_299)
+		perc_R2_gt_299 = round(perc_R2_gt_299)
 		
 		final_perc_R1_lt_299.extend((perc_R1_lt_299,perc_R2_lt_299))
 		final_perc_R1_gt_299.extend((perc_R1_gt_299,perc_R2_gt_299))
@@ -942,10 +941,10 @@ for f1,f2 in zip(file1,file2):
 		avg_quality_2_gt_299 = tot_qual2_ge_299 / R2_ge_299
 		
 		# rounding off upto 5 decimal places
-		avg_quality_1_le_299 = round(avg_quality_1_le_299,5)
-		avg_quality_1_gt_299 = round(avg_quality_1_gt_299,5)
-		avg_quality_2_le_299 = round(avg_quality_2_le_299,5)
-		avg_quality_2_gt_299 = round(avg_quality_2_gt_299,5)
+		avg_quality_1_le_299 = round(avg_quality_1_le_299)
+		avg_quality_1_gt_299 = round(avg_quality_1_gt_299)
+		avg_quality_2_le_299 = round(avg_quality_2_le_299)
+		avg_quality_2_gt_299 = round(avg_quality_2_gt_299)
 		
 		final_avg_quality_lt_299.extend((avg_quality_1_le_299,avg_quality_2_le_299))
 		final_avg_quality_ge_299.extend((avg_quality_1_gt_299,avg_quality_2_gt_299))
@@ -955,11 +954,11 @@ for f1,f2 in zip(file1,file2):
 		avg_length_2_le_299 = tot_len2_lt_299 / R2_lt_299
 		avg_length_2_gt_299 = tot_len2_ge_299 / R2_ge_299
 		
-		# rounding off upto 5 decimal places
-		avg_length_1_le_299 = round(avg_length_1_le_299,5)
-		avg_length_1_gt_299 = round(avg_length_1_gt_299,5)
-		avg_length_2_le_299 = round(avg_length_2_le_299,5)
-		avg_length_2_gt_299 = round(avg_length_2_gt_299,5)
+		# rounding off
+		avg_length_1_le_299 = round(avg_length_1_le_299)
+		avg_length_1_gt_299 = round(avg_length_1_gt_299)
+		avg_length_2_le_299 = round(avg_length_2_le_299)
+		avg_length_2_gt_299 = round(avg_length_2_gt_299)
 		
 		final_avg_length_lt_299.extend((avg_length_1_le_299,avg_length_2_le_299))
 		final_avg_length_ge_299.extend((avg_length_1_gt_299,avg_length_2_gt_299))
