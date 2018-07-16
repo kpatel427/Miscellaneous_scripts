@@ -41,34 +41,6 @@ dic_le_299_bucket = {}
 dic_gt_299_bucket = {}
 file1 = []
 file2 = []
-tot_len1_ge_149 = 0
-tot_len1_lt_149 = 0
-tot_len2_lt_149 = 0
-tot_len2_ge_149 = 0
-tot_len1_lt_249 = 0
-tot_len1_ge_249 = 0
-tot_len1_lt_299 = 0
-tot_len1_ge_299 = 0
-tot_len2_lt_249 = 0
-tot_len2_ge_249 = 0
-tot_len2_lt_299 = 0
-tot_len2_ge_299 = 0
-avg_quality_1_le_249 = 0
-avg_quality_1_gt_249 = 0
-avg_quality_2_le_249 = 0
-avg_quality_2_gt_249 = 0
-tot_qual1_lt_249 = 0
-tot_qual1_ge_249 = 0
-tot_qual2_lt_249 = 0
-tot_qual2_ge_249 = 0
-tot_qual1_lt_149 = 0
-tot_qual1_ge_149 = 0
-tot_qual2_lt_149 = 0
-tot_qual2_ge_149 = 0	
-tot_qual1_lt_299 = 0
-tot_qual1_ge_299 = 0
-tot_qual2_lt_299 = 0
-tot_qual2_ge_299 = 0
 
 files_149 = [] #Stores paired read files
 files_249 = [] #Stores paired read files
@@ -481,6 +453,10 @@ for f1,f2 in zip(file1,file2):
 		R1_ge_149 = 0
 		R2_lt_149 = 0
 		R2_ge_149 = 0
+		tot_len1_ge_149 = 0
+		tot_len1_lt_149 = 0
+		tot_len2_lt_149 = 0
+		tot_len2_ge_149 = 0
 		
 		for x in read1_length:
 			if(x < 149):
@@ -575,6 +551,10 @@ for f1,f2 in zip(file1,file2):
 		avg_quality_1_gt_149 = 0
 		avg_quality_2_le_149 = 0
 		avg_quality_2_gt_149 = 0
+		avg_length_1_le_149 = 0
+		avg_length_1_gt_149 = 0
+		avg_length_2_le_149 = 0
+		avg_length_2_gt_149 = 0
 		tot_qual1_lt_149 = 0
 		tot_qual1_ge_149 = 0
 		tot_qual2_lt_149 = 0
@@ -652,6 +632,10 @@ for f1,f2 in zip(file1,file2):
 		R1_ge_249 = 0
 		R2_lt_249 = 0
 		R2_ge_249 = 0
+		tot_len1_lt_249 = 0
+		tot_len1_ge_249 = 0
+		tot_len2_lt_249 = 0
+		tot_len2_ge_249 = 0
 		
 		for x in read1_length:
 			if(x < 249):
@@ -744,6 +728,19 @@ for f1,f2 in zip(file1,file2):
 
 		
 		# Average Quality score calculation 
+		avg_quality_1_le_249 = 0
+		avg_quality_1_gt_249 = 0
+		avg_quality_2_le_249 = 0
+		avg_quality_2_gt_249 = 0
+		avg_length_1_le_249 = 0
+		avg_length_1_gt_249 = 0
+		avg_length_2_le_249 = 0
+		avg_length_2_gt_249 = 0
+		tot_qual1_lt_249 = 0
+		tot_qual1_ge_249 = 0
+		tot_qual2_lt_249 = 0
+		tot_qual2_ge_249 = 0
+
 		for l,q in zip(read1_length,quality_scores_R1):
 
 			if(l < 249): # for lengths le 249
@@ -819,6 +816,10 @@ for f1,f2 in zip(file1,file2):
 		R1_ge_299 = 0
 		R2_lt_299 = 0
 		R2_ge_299 = 0
+		tot_len1_lt_299 = 0
+		tot_len1_ge_299 = 0
+		tot_len2_lt_299 = 0
+		tot_len2_ge_299 = 0
 		
 		for x in read1_length:
 			if(x < 299):
@@ -913,6 +914,10 @@ for f1,f2 in zip(file1,file2):
 		avg_quality_1_gt_299 = 0
 		avg_quality_2_le_299 = 0
 		avg_quality_2_gt_299 = 0
+		avg_length_1_le_299 = 0
+		avg_length_1_gt_299 = 0
+		avg_length_2_le_299 = 0
+		avg_length_2_gt_299 = 0
 		tot_qual1_lt_299 = 0
 		tot_qual1_ge_299 = 0
 		tot_qual2_lt_299 = 0
