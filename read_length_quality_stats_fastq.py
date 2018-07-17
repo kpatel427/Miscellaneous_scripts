@@ -21,10 +21,6 @@ read1_length = []
 read2_length = []
 inserts = []
 insert_sizes = []
-R1_lt_249 = 0
-R1_ge_249 = 0
-R2_lt_249 = 0
-R2_ge_249 = 0
 countN1 = 0
 countN2 = 0
 Q1_lt_30 = 0
@@ -33,12 +29,6 @@ R1 = []
 R2 = []
 Q1 = []
 Q2 = []
-dic_le_149_bucket = {}
-dic_gt_149_bucket = {}
-dic_le_249_bucket = {}
-dic_gt_249_bucket = {}
-dic_le_299_bucket = {}
-dic_gt_299_bucket = {}
 file1 = []
 file2 = []
 
@@ -401,6 +391,7 @@ for x in os.listdir('.'):
 file1 = sorted(file1)
 file2 = sorted(file2)
 
+
 for f1,f2 in zip(file1,file2):
 	
 	
@@ -474,6 +465,7 @@ for f1,f2 in zip(file1,file2):
 			elif(x >= 149):
 				R2_ge_149 += 1
 				tot_len2_ge_149 += x
+				
 				
 		R_lt_149.extend((R1_lt_149,R2_lt_149))
 		R_ge_149.extend((R1_ge_149,R2_ge_149))
@@ -575,10 +567,18 @@ for f1,f2 in zip(file1,file2):
 			elif(l >= 149):
 				tot_qual2_ge_149 += q
 				
-		avg_quality_1_le_149 = tot_qual1_lt_149 / R1_lt_149 
-		avg_quality_1_gt_149 = tot_qual1_ge_149 / R1_ge_149		
-		avg_quality_2_le_149 = tot_qual2_lt_149 / R2_lt_149
-		avg_quality_2_gt_149 = tot_qual2_ge_149 / R2_ge_149
+		
+		if(R1_lt_149 > 0 and R2_lt_149 > 0):	
+			avg_quality_1_le_149 = tot_qual1_lt_149 / R1_lt_149 
+			avg_quality_1_gt_149 = tot_qual1_ge_149 / R1_ge_149		
+			avg_quality_2_le_149 = tot_qual2_lt_149 / R2_lt_149
+			avg_quality_2_gt_149 = tot_qual2_ge_149 / R2_ge_149
+			
+		else:
+			avg_quality_1_le_149 = 0
+			avg_quality_1_gt_149 = tot_qual1_ge_149 / R1_ge_149		
+			avg_quality_2_le_149 = 0
+			avg_quality_2_gt_149 = tot_qual2_ge_149 / R2_ge_149
 				
 		# rounding off
 		avg_quality_1_le_149 = round(avg_quality_1_le_149)
@@ -590,10 +590,16 @@ for f1,f2 in zip(file1,file2):
 		final_avg_quality_ge_149.extend((avg_quality_1_gt_149,avg_quality_2_gt_149))
 		
 		# Calculating average length of reads above and below 149
-		avg_length_1_le_149 = tot_len1_lt_149/R1_lt_149 
-		avg_length_1_gt_149 = tot_len1_ge_149/R1_ge_149
-		avg_length_2_le_149 = tot_len2_lt_149/R2_lt_149
-		avg_length_2_gt_149 = tot_len2_ge_149/R2_ge_149
+		if(R1_lt_149 > 0 and R2_lt_149 > 0):	
+			avg_length_1_le_149 = tot_len1_lt_149/R1_lt_149 
+			avg_length_1_gt_149 = tot_len1_ge_149/R1_ge_149
+			avg_length_2_le_149 = tot_len2_lt_149/R2_lt_149
+			avg_length_2_gt_149 = tot_len2_ge_149/R2_ge_149
+		else:
+			avg_length_1_le_149 = 0
+			avg_length_1_gt_149 = tot_len1_ge_149/R1_ge_149
+			avg_length_2_le_149 = 0
+			avg_length_2_gt_149 = tot_len2_ge_149/R2_ge_149
 		
 		# rounding off
 		avg_length_1_le_149 = round(avg_length_1_le_149)
@@ -604,17 +610,16 @@ for f1,f2 in zip(file1,file2):
 		final_avg_length_lt_149.extend((avg_length_1_le_149,avg_length_2_le_149))
 		final_avg_length_ge_149.extend((avg_length_1_gt_149,avg_length_2_gt_149))
 		
-		
+	
 				
 	elif(hwhisker1 == 251 or hwhisker1 == 252 and hwhisker2 == 251 or hwhisker2 == 252 ):
 		
 		files_249.extend((f1,f2))
 		
-		
 		# command line arguments
 		fastq1 = f1
 		fastq2 = f2
-
+	
 		# Parsing fastq: function call
 		seqs1,quals1 = parseFastq(fastq1)	# takes in fastq file as an input from command line and passes it as an argument to parseFastq function. Returns sequences and qualities and stores in seqs & quals
 		seqs2,quals2 = parseFastq(fastq2)
@@ -627,6 +632,7 @@ for f1,f2 in zip(file1,file2):
 		# average quality scores for each read: function call
 		read1_length,quality_scores_R1 = qual_score(quals1)
 		read2_length,quality_scores_R2 = qual_score(quals2)
+		
 		
 		R1_lt_249 = 0
 		R1_ge_249 = 0
@@ -653,9 +659,8 @@ for f1,f2 in zip(file1,file2):
 			elif(x >= 249):
 				R2_ge_249 += 1
 				tot_len2_ge_249 += x
-				
 		
-			
+		
 		R_lt_249.extend((R1_lt_249,R2_lt_249))
 		R_ge_249.extend((R1_ge_249,R2_ge_249))
 	
@@ -755,12 +760,18 @@ for f1,f2 in zip(file1,file2):
 			elif(l >= 249):
 				tot_qual2_ge_249 += q
 				
-				
+		
 		# Average quality per bucket
-		avg_quality_1_le_249 = tot_qual1_lt_249 / R1_lt_249
-		avg_quality_1_gt_249 = tot_qual1_ge_249 / R1_ge_249
-		avg_quality_2_le_249 = tot_qual2_lt_249 / R2_lt_249
-		avg_quality_2_gt_249 = tot_qual2_ge_249 / R2_ge_249
+		if(R1_lt_249 > 0 and R2_lt_249 > 0):
+			avg_quality_1_le_249 = tot_qual1_lt_249 / R1_lt_249
+			avg_quality_1_gt_249 = tot_qual1_ge_249 / R1_ge_249
+			avg_quality_2_le_249 = tot_qual2_lt_249 / R2_lt_249
+			avg_quality_2_gt_249 = tot_qual2_ge_249 / R2_ge_249
+		else:
+			avg_quality_1_le_249 = 0	# if there are no reads less than 251
+			avg_quality_1_gt_249 = tot_qual1_ge_249 / R1_ge_249
+			avg_quality_2_le_249 = 0	# if there are no reads less than 251
+			avg_quality_2_gt_249 = tot_qual2_ge_249 / R2_ge_249
 		
 		# rounding off
 		avg_quality_1_le_249 = round(avg_quality_1_le_249)
@@ -771,11 +782,17 @@ for f1,f2 in zip(file1,file2):
 	
 		final_avg_quality_lt_249.extend((avg_quality_1_le_249,avg_quality_2_le_249))
 		final_avg_quality_ge_249.extend((avg_quality_1_gt_249,avg_quality_2_gt_249))
-
-		avg_length_1_le_249 = tot_len1_lt_249 / R1_lt_249
-		avg_length_1_gt_249 = tot_len1_ge_249 / R1_ge_249
-		avg_length_2_le_249 = tot_len2_lt_249 / R2_lt_249 
-		avg_length_2_gt_249 = tot_len2_ge_249 / R2_ge_249
+		
+		if(R1_lt_249 > 0 and R2_lt_249 > 0):
+			avg_length_1_le_249 = tot_len1_lt_249 / R1_lt_249
+			avg_length_1_gt_249 = tot_len1_ge_249 / R1_ge_249
+			avg_length_2_le_249 = tot_len2_lt_249 / R2_lt_249 
+			avg_length_2_gt_249 = tot_len2_ge_249 / R2_ge_249
+		else:
+			avg_length_1_le_249 = 0
+			avg_length_1_gt_249 = tot_len1_ge_249 / R1_ge_249
+			avg_length_2_le_249 = 0
+			avg_length_2_gt_249 = tot_len2_ge_249 / R2_ge_249
 		
 		# rounding off
 		avg_length_1_le_249 = round(avg_length_1_le_249)
@@ -787,8 +804,6 @@ for f1,f2 in zip(file1,file2):
 		final_avg_length_lt_249.extend((avg_length_1_le_249,avg_length_2_le_249))
 		final_avg_length_ge_249.extend((avg_length_1_gt_249,avg_length_2_gt_249))
 	
-		
-		
 				
 	else:
 		files_299.extend((f1,f2))
@@ -923,8 +938,7 @@ for f1,f2 in zip(file1,file2):
 		tot_qual2_lt_299 = 0
 		tot_qual2_ge_299 = 0
 		
-		
-		
+
 		for l,q in zip(read1_length,quality_scores_R1):
 
 			if(l <= 299): # for lengths le 249
@@ -939,11 +953,17 @@ for f1,f2 in zip(file1,file2):
 			elif(l > 299):
 				tot_qual2_ge_299 += q
 				
-				
-		avg_quality_1_le_299 = tot_qual1_lt_299 / R1_lt_299
-		avg_quality_1_gt_299 = tot_qual1_ge_299 / R1_ge_299
-		avg_quality_2_le_299 = tot_qual2_lt_299 / R2_lt_299
-		avg_quality_2_gt_299 = tot_qual2_ge_299 / R2_ge_299
+	
+		if(R1_lt_299 > 0 and R2_lt_299 > 0):		
+			avg_quality_1_le_299 = tot_qual1_lt_299 / R1_lt_299
+			avg_quality_1_gt_299 = tot_qual1_ge_299 / R1_ge_299
+			avg_quality_2_le_299 = tot_qual2_lt_299 / R2_lt_299
+			avg_quality_2_gt_299 = tot_qual2_ge_299 / R2_ge_299
+		else:
+			avg_quality_1_le_299 = 0
+			avg_quality_1_gt_299 = tot_qual1_ge_299 / R1_ge_299
+			avg_quality_2_le_299 = 0
+			avg_quality_2_gt_299 = tot_qual2_ge_299 / R2_ge_299
 		
 		# rounding off upto 5 decimal places
 		avg_quality_1_le_299 = round(avg_quality_1_le_299)
@@ -954,10 +974,17 @@ for f1,f2 in zip(file1,file2):
 		final_avg_quality_lt_299.extend((avg_quality_1_le_299,avg_quality_2_le_299))
 		final_avg_quality_ge_299.extend((avg_quality_1_gt_299,avg_quality_2_gt_299))
 
-		avg_length_1_le_299 = tot_len1_lt_299 / R1_lt_299
-		avg_length_1_gt_299 = tot_len1_ge_299 / R1_ge_299
-		avg_length_2_le_299 = tot_len2_lt_299 / R2_lt_299
-		avg_length_2_gt_299 = tot_len2_ge_299 / R2_ge_299
+		if(R1_lt_299 > 0 and R2_lt_299 > 0):	
+			avg_length_1_le_299 = tot_len1_lt_299 / R1_lt_299
+			avg_length_1_gt_299 = tot_len1_ge_299 / R1_ge_299
+			avg_length_2_le_299 = tot_len2_lt_299 / R2_lt_299
+			avg_length_2_gt_299 = tot_len2_ge_299 / R2_ge_299
+		else:
+			avg_length_1_le_299 = 0
+			avg_length_1_gt_299 = tot_len1_ge_299 / R1_ge_299
+			avg_length_2_le_299 = 0
+			avg_length_2_gt_299 = tot_len2_ge_299 / R2_ge_299
+		
 		
 		# rounding off
 		avg_length_1_le_299 = round(avg_length_1_le_299)
