@@ -11,6 +11,9 @@ We convert each t[i] to u[i] by removing any subsequent occurrences non-distinct
 3. t[i] = "ADA" --> u[i] = "AD"
 
 We then print each  on a new line.
+
+constraints:
+n is a multiple of k
 '''
 
 
